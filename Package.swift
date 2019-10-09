@@ -23,7 +23,8 @@ let package = Package(
         )
     ],
     dependencies: [
-         .package(url: "https://github.com/IBM-Swift/BlueSocket", from: "1.0.50")
+         .package(url: "https://github.com/IBM-Swift/BlueSocket", from: "1.0.0"),
+         .package(url: "https://github.com/pierrickrouxel/SSDPClient", .branch("master"))
     ],
     targets: [
         .target(
@@ -37,6 +38,13 @@ let package = Package(
         .target(
             name: "SearcherSample",
             dependencies: [ "SSDP" ]
+        ),
+        .target(
+            name: "SSDPClientSample",
+            dependencies: [ "SSDPClient" ],
+            swiftSettings: [
+                .define("DEBUG", .when(platforms: nil, configuration: .debug))
+            ]
         )
     ]
 )

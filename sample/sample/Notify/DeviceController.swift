@@ -3,7 +3,7 @@ import Foundation
 
 class DeviceController {
     fileprivate let myUuid = UUID.init().uuidString
-    fileprivate let urn = Value.NT.urn(domain: "org-teste", type: "appletv", version: 1)
+    fileprivate let urn = Value.NT.urn(domain: "org-teste", type: "dial", version: 1)
     
     fileprivate var byebyeRequest: ByebyeRequest?
     fileprivate var aliveRequest: AliveRequest?
@@ -23,7 +23,8 @@ class DeviceController {
 //        }
         
         let alive = AliveRequest.RTU.self
-        aliveRequest = alive.alive(location: getAddress(for: .wifi) ?? getAddress(for: .cellular) ?? "0.0.0.0:0",
+        let loc = getAddress(for: .wifi) ?? getAddress(for: .cellular) ?? "0.0.0.0:0"
+        aliveRequest = alive.alive(location: "ws://\(loc):6005",
                                    nt: urn,
                                    uuid: myUuid,
                                    duration: 10,
