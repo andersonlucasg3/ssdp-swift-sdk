@@ -42,7 +42,7 @@ public enum Value {
                 let v = UIDevice.current.systemVersion
                 let p = product()
                 let pv = version()
-                return "\(os)/\(v) UPnP/1.0 \(p)/\(pv)"
+                return "\(os)/\(v) UPnP/2.0 \(p)/\(pv)"
             }
         }
         
