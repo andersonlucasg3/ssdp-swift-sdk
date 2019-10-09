@@ -4,6 +4,10 @@ import PackageDescription
 
 let package = Package(
     name: "SSDP",
+    platforms: [
+        .iOS(.v10),
+        .tvOS(.v11)
+    ],
     products: [
         .library(
             name: "SSDP",

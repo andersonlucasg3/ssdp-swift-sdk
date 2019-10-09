@@ -1,0 +1,3 @@
+protocol NotifyDelegateProtocol: class {
+    
+}
