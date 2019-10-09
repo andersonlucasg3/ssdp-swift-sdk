@@ -46,12 +46,11 @@ open class Request {
     
     fileprivate func createSocket() throws {
         socket = try .create(family: .inet, type: .datagram, proto: .udp)
-        try socket?.setBlocking(mode: false)
         socket?.readBufferSize = 1024 * 10
     }
     
     fileprivate func readReponse() {
-        DispatchQueue.init(label: "com.response.listening", qos: .background).async { [weak self] in
+        DispatchQueue.init(label: "com.response.listening", qos: .background, target: .global()).async { [weak self] in
             guard let self = self else { return }
             
             var currentTime: TimeInterval
