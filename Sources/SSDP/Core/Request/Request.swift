@@ -83,6 +83,8 @@ open class Request {
                                 
             } while currentTime < self.responsesDuration
             
+            Log.debug(message: "Finished trying do read data...")
+            
             self.socket?.close()
             self.socket = nil
         }
