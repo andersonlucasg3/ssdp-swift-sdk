@@ -10,11 +10,17 @@ import SwiftUI
 import SSDP
 
 struct ContentView: View {
+    let controller = DeviceController.init()
+    
     var body: some View {
         VStack() {
             Button.init("Send Notify request") {
-//                Notify
-            }
+                self.controller.notify()
+            }.frame(height: 50, alignment: Alignment.center)
+            
+            Button.init("Send Search request") {
+                self.controller.search()
+            }.frame(height: 50, alignment: Alignment.center)
         }
     }
 }

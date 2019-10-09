@@ -14,6 +14,7 @@
 		7163F742234E4A5E00E7DEFD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7163F741234E4A5E00E7DEFD /* Preview Assets.xcassets */; };
 		7163F745234E4A5E00E7DEFD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7163F743234E4A5E00E7DEFD /* LaunchScreen.storyboard */; };
 		7163F74E234E4B2500E7DEFD /* SSDP in Frameworks */ = {isa = PBXBuildFile; productRef = 7163F74D234E4B2500E7DEFD /* SSDP */; };
+		7163F751234E539000E7DEFD /* DeviceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7163F750234E539000E7DEFD /* DeviceController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		7163F741234E4A5E00E7DEFD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		7163F744234E4A5E00E7DEFD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7163F746234E4A5E00E7DEFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7163F750234E539000E7DEFD /* DeviceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 		7163F737234E4A5B00E7DEFD /* sample */ = {
 			isa = PBXGroup;
 			children = (
+				7163F74F234E538500E7DEFD /* Notify */,
 				7163F738234E4A5B00E7DEFD /* AppDelegate.swift */,
 				7163F73A234E4A5B00E7DEFD /* SceneDelegate.swift */,
 				7163F73C234E4A5B00E7DEFD /* ContentView.swift */,
@@ -75,6 +78,14 @@
 				7163F741234E4A5E00E7DEFD /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		7163F74F234E538500E7DEFD /* Notify */ = {
+			isa = PBXGroup;
+			children = (
+				7163F750234E539000E7DEFD /* DeviceController.swift */,
+			);
+			path = Notify;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -156,6 +167,7 @@
 			files = (
 				7163F739234E4A5B00E7DEFD /* AppDelegate.swift in Sources */,
 				7163F73B234E4A5B00E7DEFD /* SceneDelegate.swift in Sources */,
+				7163F751234E539000E7DEFD /* DeviceController.swift in Sources */,
 				7163F73D234E4A5B00E7DEFD /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
