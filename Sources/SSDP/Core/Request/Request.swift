@@ -14,7 +14,7 @@ open class Request {
     
     public init() { }
     
-    func request() throws {
+    public func request() throws {
         guard socket == nil else { throw RequestError.alreadyRequesting }
         
         try createSocket()
