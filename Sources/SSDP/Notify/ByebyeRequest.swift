@@ -4,6 +4,10 @@ public class ByebyeRequest: Request {
     fileprivate var nt: Value.NT!
     fileprivate var uuid: String!
     
+    public override var shouldHandleResponses: Bool { return false }
+    
+    internal init() { super.init(sendCount: 1) }
+    
     public override func requestBody() throws -> Data {
         let formatter = RequestBodyFormatter.init()
         
@@ -18,10 +22,6 @@ public class ByebyeRequest: Request {
         Log.debug(message: "Sending request \n\(formatted)")
         
         return formatted.data(using: .utf8)!
-    }
-    
-    public override func received(response: String, from host: String) throws {
-        // TODO: implement response handling
     }
 }
 

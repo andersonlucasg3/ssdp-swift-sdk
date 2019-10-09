@@ -9,7 +9,7 @@ public class AliveRequest: Request {
     
     public override var shouldHandleResponses: Bool { return false }
     
-    fileprivate override init() { super.init() }
+    internal init() { super.init(sendCount: 3) }
     
     override open func requestBody() throws -> Data {
         let formatter = RequestBodyFormatter.init()

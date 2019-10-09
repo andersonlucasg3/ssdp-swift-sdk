@@ -9,10 +9,13 @@ open class Request {
     
     fileprivate var socket: Socket?
     fileprivate var startTime: TimeInterval = 0
+    fileprivate var sendCount: Int
     
     open var shouldHandleResponses: Bool { return true }
     
-    public init() { }
+    internal init(sendCount: Int) {
+        self.sendCount = sendCount
+    }
     
     public func request() throws {
         guard socket == nil else { throw RequestError.alreadyRequesting }
@@ -47,13 +50,14 @@ open class Request {
         
         sendBlock()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            sendBlock()
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        let sendCount = self.sendCount
+        (1..<sendCount).forEach { (index) in
+            DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(index)) {
                 sendBlock()
                 
-                DispatchQueue.main.async(execute: completion)
+                if index == sendCount - 1 {
+                    DispatchQueue.main.async(execute: completion)
+                }
             }
         }
     }

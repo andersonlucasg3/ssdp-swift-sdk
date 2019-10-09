@@ -6,6 +6,8 @@ public class SearchRequest: Request {
     
     public override var shouldHandleResponses: Bool { return true }
     
+    internal init() { super.init(sendCount: 3) }
+    
     public override func requestBody() throws -> Data {
         let formatter = RequestBodyFormatter.init()
         
