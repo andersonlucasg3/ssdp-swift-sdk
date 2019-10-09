@@ -12,9 +12,9 @@ open class Request {
     
     open fileprivate(set) var shouldHandleResponses: Bool = false
     
-    init() { }
+    public init() { }
     
-    func request(headers: Headers) throws {
+    func request() throws {
         guard socket == nil else { throw RequestError.alreadyRequesting }
         
         try createSocket()
@@ -24,7 +24,7 @@ open class Request {
         guard let port = Int32(Host.port.rawValue) else { throw RequestError.invalidPort(value: Host.port.rawValue) }
         guard let address = Socket.createAddress(for: Host.ip.rawValue, on: port) else { throw RequestError.invalidIP(value: Host.ip.rawValue) }
         
-        let body = try requestBody(headers: headers)
+        let body = try requestBody()
         
         // TODO: handle possibility to write partial data
         try socket?.write(from: body, to: address)
@@ -36,7 +36,7 @@ open class Request {
         readReponse()
     }
     
-    open func requestBody(headers: Headers) throws -> String {
+    open func requestBody() throws -> Data {
         throw RequestError.notImplemented(name: #function)
     }
     

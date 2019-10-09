@@ -9,6 +9,7 @@ public enum Value: RawRepresentable {
     case location(value: String)
     case cacheControl(value: CacheControl)
     case server(value: Server)
+    case usn(value: USN)
     
     public var rawValue: String {
         switch self {
@@ -18,6 +19,7 @@ public enum Value: RawRepresentable {
         case .location(let value): return value
         case .cacheControl(let value): return from(cc: value)
         case .server(let value): return value.rawValue
+        case .usn(let value): return from(usn: value)
         }
     }
     
@@ -41,6 +43,13 @@ public enum Value: RawRepresentable {
     fileprivate func from(cc: CacheControl) -> String {
         switch cc {
         case .maxAge(let seconds): return "max-age=\(seconds)"
+        }
+    }
+    
+    fileprivate func from(usn: USN) -> String {
+        switch usn {
+        case .uuid(let uuid, let nt):
+            return "uuid:\(uuid)::\(from(nt: nt))"
         }
     }
         
