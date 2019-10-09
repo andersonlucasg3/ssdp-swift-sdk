@@ -19,21 +19,41 @@ open class Request {
         
         try createSocket()
         
-        try socket?.listen(on: 0)
+        try socket?.listen(on: Host.port.rawValue)
         
         guard let port = Int32(Host.port.rawValue) else { throw RequestError.invalidPort(value: Host.port.rawValue) }
         guard let address = Socket.createAddress(for: Host.ip.rawValue, on: port) else { throw RequestError.invalidIP(value: Host.ip.rawValue) }
         
         let body = try requestBody()
         
-        // TODO: handle possibility to write partial data
-        try socket?.write(from: body, to: address)
+        multipleShots(body: body, to: address) { [weak self] in
+            guard let self = self else { return }
+            
+            self.startTime = Date.init().timeIntervalSince1970
+            
+            guard self.shouldHandleResponses else { return }
+            
+            self.readReponse()
+        }
+    }
+    
+    fileprivate func multipleShots(body: Data, to address: Socket.Address, completion: @escaping os_block_t) {
+        let sendBlock = { [weak self] in
+            // TODO: handle possibility to write partial data
+            _ = try? self?.socket?.write(from: body, to: address)
+        }
         
-        startTime = Date.init().timeIntervalSince1970
+        sendBlock()
         
-        guard shouldHandleResponses else { return }
-        
-        readReponse()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            sendBlock()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                sendBlock()
+                
+                DispatchQueue.main.async(execute: completion)
+            }
+        }
     }
     
     open func requestBody() throws -> Data {

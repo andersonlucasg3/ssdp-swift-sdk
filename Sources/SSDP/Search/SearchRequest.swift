@@ -11,7 +11,7 @@ public class SearchRequest: Request {
         formatter.set(method: .mSearch)
         formatter.add(header: .host, with: .host(value: .address))
         formatter.add(header: .man, with: .man(value: .ssdp(ssdp: .discover)))
-        formatter.add(header: .mx, with: .mx(value: .delay(seconds: 1)))
+        formatter.add(header: .mx, with: .mx(value: .delay(seconds: 3)))
         formatter.add(header: .st, with: .st(value: .st(nt: nt)))
         
         let formatted = formatter.format()
