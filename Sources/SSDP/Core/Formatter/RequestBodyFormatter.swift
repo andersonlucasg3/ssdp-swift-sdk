@@ -1,13 +1,17 @@
 class RequestBodyFormatter {
     private var method: Method!
-    private var headers: [Header: Value] = [:]
+    private var headers: [(key: Header, value: Value)] = []
     
     public func set(method: Method) {
         self.method = method
     }
     
     public func add(header key: Header, with value: Value) {
-        headers[key] = value
+        if let index = headers.firstIndex(where: { $0.key == key }) {
+            headers[index] = (key, value)
+        } else {
+            headers.append((key, value))
+        }
     }
     
     public func format() -> String {

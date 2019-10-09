@@ -16,7 +16,7 @@ public class SearchRequest: Request {
         
         let formatted = formatter.format()
         
-        Log.debug(message: "Sending request \n \(formatted)")
+        Log.debug(message: "Sending request \n\(formatted)")
         
         return formatted.data(using: .utf8)!
     }
