@@ -54,11 +54,16 @@ open class Request {
         DispatchQueue.init(label: "com.response.listening", qos: .background).async { [weak self] in
             guard let self = self else { return }
             
+            var currentTime: TimeInterval
             repeat {
                 
                 self.read()
                 
-            } while Date().timeIntervalSince1970 - self.startTime > self.responsesDuration
+                currentTime = Date().timeIntervalSince1970 - self.startTime
+                
+                Log.debug(message: "Trying to read elapsed: \(currentTime), total: \(self.responsesDuration)")
+                
+            } while currentTime > self.responsesDuration
             
             self.socket?.close()
             self.socket = nil
