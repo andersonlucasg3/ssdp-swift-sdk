@@ -10,7 +10,7 @@ open class Request {
     fileprivate var socket: Socket?
     fileprivate var startTime: TimeInterval = 0
     
-    open fileprivate(set) var shouldHandleResponses: Bool = false
+    open var shouldHandleResponses: Bool { return true }
     
     public init() { }
     
@@ -75,7 +75,7 @@ open class Request {
                     throw RequestError.invalidRepsonse(data: data)
                 }
                 let (remoteHost, _) = Socket.hostnameAndPort(from: address!)!
-                Log.debug(message: "Received \"\(response)\" from \(remoteHost)")
+                Log.debug(message: "Received \n \(response) \n from \(remoteHost)")
                 try received(response: response, from: remoteHost)
             }
         } catch {

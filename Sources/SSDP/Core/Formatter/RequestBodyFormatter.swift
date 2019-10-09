@@ -28,6 +28,9 @@ class RequestBodyFormatter {
         case .cacheControl(let value): return from(cc: value)
         case .server(let value): return value.rawValue
         case .usn(let value): return from(usn: value)
+        case .man(let value): return from(man: value)
+        case .mx(let value): return from(mx: value)
+        case .st(let value): return from(st: value)
         }
     }
     
@@ -57,7 +60,22 @@ class RequestBodyFormatter {
         }
     }
     
-    public enum Method: String {
-        case notify = "NOTIFY * HTTP/1.1"
+    fileprivate func from(man: Value.MAN) -> String {
+        switch man {
+        case .ssdp(let ssdp):
+            return from(nts: .sspd(value: ssdp))
+        }
+    }
+    
+    fileprivate func from(mx: Value.MX) -> String {
+        switch mx {
+        case .delay(let seconds): return "\(seconds)"
+        }
+    }
+    
+    fileprivate func from(st: Value.ST) -> String {
+        switch st {
+        case .st(let nt): return from(nt: nt)
+        }
     }
 }
