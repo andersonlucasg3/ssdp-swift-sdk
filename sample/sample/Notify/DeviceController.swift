@@ -23,7 +23,7 @@ class DeviceController {
         }
         
         let alive = AliveRequest.RTU.self
-        aliveRequest = alive.alive(location: "192.168.0.1:3500",
+        aliveRequest = alive.alive(location: getAddress(for: .wifi) ?? getAddress(for: .cellular) ?? "0.0.0.0:0",
                                    nt: urn,
                                    uuid: myUuid,
                                    duration: 10,
