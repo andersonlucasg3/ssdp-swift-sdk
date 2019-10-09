@@ -1,22 +1,22 @@
 import struct Foundation.Data
 
 public class NotifyRequest: Request {
-    public struct Builder {
+    public class Builder {
         fileprivate var request: NotifyRequest
         
         public init() {
             request = .init()
         }
         
-        public mutating func set(location: String) -> Builder { request.location = location; return self }
-        public mutating func set(domain: String) -> Builder { request.domain = domain; return self }
-        public mutating func set(device: String) -> Builder { request.device = device; return self }
-        public mutating func set(deviceType: String) -> Builder { request.deviceType = deviceType; return self }
-        public mutating func set(version: UInt16) -> Builder { request.version = version; return self }
-        public mutating func set(ssdp message: Value.SSDP) -> Builder { request.ssdp = message; return self }
-        public mutating func set(uuid: String) -> Builder { request.uuid = uuid; return self }
+        public func set(location: String) -> Builder { request.location = location; return self }
+        public func set(domain: String) -> Builder { request.domain = domain; return self }
+        public func set(device: String) -> Builder { request.device = device; return self }
+        public func set(deviceType: String) -> Builder { request.deviceType = deviceType; return self }
+        public func set(version: UInt16) -> Builder { request.version = version; return self }
+        public func set(ssdp message: Value.SSDP) -> Builder { request.ssdp = message; return self }
+        public func set(uuid: String) -> Builder { request.uuid = uuid; return self }
         
-        func build() -> NotifyRequest {
+        public func build() -> NotifyRequest {
             return request
         }
     }
