@@ -61,6 +61,7 @@ public enum Value {
         case alive = "alive"
         case byebye = "byebye"
         case discover = "discover"
+        case all = "all"
     }
     
     public enum MAN {
@@ -72,6 +73,7 @@ public enum Value {
     }
     
     public enum ST {
-        case st(nt: NT)
+        case nt(nt: NT)
+        case ssdp(ssdp: SSDP)
     }
 }

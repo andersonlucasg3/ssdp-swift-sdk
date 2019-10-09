@@ -2,6 +2,7 @@ import struct Foundation.Data
 
 public class SearchRequest: Request {
     fileprivate var nt: Value.NT!
+    fileprivate var ssdp: Value.SSDP!
     
     public override var shouldHandleResponses: Bool { return true }
     
@@ -12,7 +13,8 @@ public class SearchRequest: Request {
         formatter.add(header: .host, with: .host(value: .address))
         formatter.add(header: .man, with: .man(value: .ssdp(ssdp: .discover)))
         formatter.add(header: .mx, with: .mx(value: .delay(seconds: 3)))
-        formatter.add(header: .st, with: .st(value: .st(nt: nt)))
+        if let ssdp = ssdp { formatter.add(header: .st, with: .st(value: .ssdp(ssdp: ssdp))) }
+        else { formatter.add(header: .st, with: .st(value: .nt(nt: nt))) }
         
         let formatted = formatter.format()
         
@@ -33,6 +35,7 @@ public extension SearchRequest {
         public init() { request = .init() }
         
         public func set(nt: Value.NT) -> Builder { request.nt = nt; return self }
+        public func set(ssdp: Value.SSDP) -> Builder { request.ssdp = ssdp; return self }
         
         public func build() -> SearchRequest {
             return request

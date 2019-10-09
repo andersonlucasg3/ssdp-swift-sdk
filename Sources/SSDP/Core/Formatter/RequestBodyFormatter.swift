@@ -79,7 +79,8 @@ class RequestBodyFormatter {
     
     fileprivate func from(st: Value.ST) -> String {
         switch st {
-        case .st(let nt): return from(nt: nt)
+        case .nt(let nt): return from(nt: nt)
+        case .ssdp(let ssdp): return "ssdp:\(ssdp.rawValue)"
         }
     }
 }
