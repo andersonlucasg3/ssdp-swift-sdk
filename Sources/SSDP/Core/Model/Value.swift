@@ -16,10 +16,12 @@ public enum Value {
         
     public enum NT {
         case urn(domain: String, device: String, type: String, version: UInt16)
+        case ssdp(ssdp: SSDP)
     }
     
     public enum USN {
-        case uuid(uuid: String, nt: NT)
+        case nt(uuid: String, nt: NT)
+        case uuid(uuid: String)
     }
 
     public enum NTS {

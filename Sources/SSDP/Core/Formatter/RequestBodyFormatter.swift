@@ -42,6 +42,8 @@ class RequestBodyFormatter {
         switch nt {
         case .urn(let domain, let device, let type, let version):
             return "urn:\(domain):\(device):\(type):\(version)"
+        case .ssdp(let ssdp):
+            return "ssdp:\(ssdp.rawValue)"
         }
     }
     
@@ -59,8 +61,10 @@ class RequestBodyFormatter {
     
     fileprivate func from(usn: Value.USN) -> String {
         switch usn {
-        case .uuid(let uuid, let nt):
+        case .nt(let uuid, let nt):
             return "uuid:\(uuid)::\(from(nt: nt))"
+        case .uuid(let uuid):
+            return "uuid:\(uuid)"
         }
     }
     

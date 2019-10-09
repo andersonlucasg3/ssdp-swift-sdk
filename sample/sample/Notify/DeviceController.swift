@@ -36,8 +36,9 @@ class DeviceController {
     }
     
     func search() {
-        let rtu = SearchRequest.Builder.self
-        searchRequest = rtu.init().set(nt: .)
+        searchRequest = SearchRequest.Builder.init()
+            .set(ssdp: .all)
+            .build()
         
         do {
             try searchRequest?.request()
