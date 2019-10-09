@@ -1,5 +1,7 @@
 import struct Foundation.TimeInterval
+#if !os(macOS)
 import class UIKit.UIDevice
+#endif
 import class Foundation.Bundle
 
 public enum Value {
@@ -38,11 +40,15 @@ public enum Value {
         public var rawValue: String {
             switch self {
             case .this:
+                #if !os(macOS)
                 let os = UIDevice.current.systemName
                 let v = UIDevice.current.systemVersion
                 let p = product()
                 let pv = version()
-                return "\(os)/\(v) UPnP/2.0 \(p)/\(pv)"
+                return "\(os)/\(v) UPnP/1.0 \(p)/\(pv)"
+                #else
+                return "macOS/15 UPnP/1.0 test/1.0"
+                #endif
             }
         }
         

@@ -12,6 +12,14 @@ let package = Package(
         .library(
             name: "SSDP",
             targets: [ "SSDP" ]
+        ),
+        .executable(
+            name: "AdvertiserSample",
+            targets: [ "AdvertiserSample" ]
+        ),
+        .executable(
+            name: "SearcherSample",
+            targets: ["SearcherSample"]
         )
     ],
     dependencies: [
@@ -21,6 +29,14 @@ let package = Package(
         .target(
             name: "SSDP",
             dependencies: [ "Socket" ]
+        ),
+        .target(
+            name: "AdvertiserSample",
+            dependencies: [ "SSDP" ]
+        ),
+        .target(
+            name: "SearcherSample",
+            dependencies: [ "SSDP" ]
         )
     ]
 )

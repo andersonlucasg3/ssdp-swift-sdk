@@ -42,17 +42,17 @@ public extension SearchRequest {
         public func build() -> SearchRequest {
             return request
         }
+    }
+    
+    enum RTU {
+        case search(nt: Value.NT)
         
-        public enum RTU {
-            case search(nt: Value.NT)
-            
-            public func build() -> SearchRequest {
-                switch self {
-                case .search(let nt):
-                    return Builder()
-                        .set(nt: nt)
-                        .build()
-                }
+        public func build() -> SearchRequest {
+            switch self {
+            case .search(let nt):
+                return Builder()
+                    .set(nt: nt)
+                    .build()
             }
         }
     }
