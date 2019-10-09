@@ -19,7 +19,7 @@ open class Request {
         
         try createSocket()
         
-        try socket?.listen(on: Host.port.rawValue)
+        try socket?.listen(on: Int(Host.port.rawValue)!)
         
         guard let port = Int32(Host.port.rawValue) else { throw RequestError.invalidPort(value: Host.port.rawValue) }
         guard let address = Socket.createAddress(for: Host.ip.rawValue, on: port) else { throw RequestError.invalidIP(value: Host.ip.rawValue) }
@@ -66,6 +66,7 @@ open class Request {
     
     fileprivate func createSocket() throws {
         socket = try .create(family: .inet, type: .datagram, proto: .udp)
+        try socket?.setBlocking(mode: false)
         socket?.readBufferSize = 1024 * 10
     }
     
