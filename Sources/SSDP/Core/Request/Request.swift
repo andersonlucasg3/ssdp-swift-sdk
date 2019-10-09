@@ -60,10 +60,8 @@ open class Request {
                 self.read()
                 
                 currentTime = Date().timeIntervalSince1970 - self.startTime
-                
-                Log.debug(message: "Trying to read elapsed: \(currentTime), total: \(self.responsesDuration)")
-                
-            } while currentTime > self.responsesDuration
+                                
+            } while currentTime < self.responsesDuration
             
             self.socket?.close()
             self.socket = nil
