@@ -17,7 +17,7 @@ class RequestBodyFormatter {
     public func format() -> String {
         var output = "\(method.rawValue)\r\n"
         for kv in headers {
-            output.append("\(kv.key.rawValue):\(value(kv.value))\r\n")
+            output.append("\(kv.key.rawValue): \(value(kv.value))\r\n")
         }
         output.append("\r\n")
         return output
@@ -71,7 +71,7 @@ class RequestBodyFormatter {
     fileprivate func from(man: Value.MAN) -> String {
         switch man {
         case .ssdp(let ssdp):
-            return from(nts: .sspd(value: ssdp))
+            return "\"\(from(nts: .sspd(value: ssdp)))\""
         }
     }
     
