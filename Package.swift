@@ -11,9 +11,7 @@ let package = Package(
     products: [
         .library(
             name: "SSDP",
-            targets: [
-                "SSDP"
-            ]
+            targets: [ "SSDP" ]
         )
     ],
     dependencies: [
@@ -22,9 +20,7 @@ let package = Package(
     targets: [
         .target(
             name: "SSDP",
-            dependencies: [
-                "Socket"
-            ]
+            dependencies: [ "Socket" ]
         )
     ]
 )
