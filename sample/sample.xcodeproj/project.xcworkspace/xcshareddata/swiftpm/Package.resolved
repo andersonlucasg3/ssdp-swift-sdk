@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Socket",
+        "repositoryURL": "https://github.com/IBM-Swift/BlueSocket",
+        "state": {
+          "branch": null,
+          "revision": "f82e1401f04f62b2e8ce4670456d104466957810",
+          "version": "1.0.50"
+        }
+      },
+      {
+        "package": "SSDP",
+        "repositoryURL": "git@github.com:andersonlucasg3/ssdp-swift-sdk.git",
+        "state": {
+          "branch": "develop",
+          "revision": "ce0d65d51f9dc314e9a0d8be919f59962da4269a",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

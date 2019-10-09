@@ -1,3 +1,3 @@
-protocol NotifyDelegateProtocol: class {
+public protocol NotifyDelegateProtocol: class {
     
 }

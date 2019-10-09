@@ -2,7 +2,7 @@ import struct Foundation.TimeInterval
 import class UIKit.UIDevice
 import class Foundation.Bundle
 
-enum Value: RawRepresentable {
+public enum Value: RawRepresentable {
     case host(value: Host)
     case nt(value: NT)
     case nts(value: NTS)
@@ -10,7 +10,7 @@ enum Value: RawRepresentable {
     case cacheControl(value: CacheControl)
     case server(value: Server)
     
-    var rawValue: String {
+    public var rawValue: String {
         switch self {
         case .host(let value): return value.rawValue
         case .nt(let value): return from(nt: value)
@@ -21,7 +21,7 @@ enum Value: RawRepresentable {
         }
     }
     
-    init?(rawValue: String) {
+    public init?(rawValue: String) {
         return nil
     }
     
@@ -44,26 +44,26 @@ enum Value: RawRepresentable {
         }
     }
         
-    enum NT {
+    public enum NT {
         case urn(domain: String, device: String, type: String, version: UInt16)
     }
     
-    enum USN {
+    public enum USN {
         case uuid(uuid: String, nt: NT)
     }
 
-    enum NTS {
+    public enum NTS {
         case sspd(value: SSDP)
     }
 
-    enum CacheControl {
+    public enum CacheControl {
         case maxAge(seconds: UInt16)
     }
     
-    enum Server: RawRepresentable {
+    public enum Server: RawRepresentable {
         case value
         
-        var rawValue: String {
+        public var rawValue: String {
             switch self {
             case .value:
                 let os = UIDevice.current.systemName
@@ -74,7 +74,7 @@ enum Value: RawRepresentable {
             }
         }
         
-        init?(rawValue: Self.RawValue) {
+        public init?(rawValue: Self.RawValue) {
             return nil
         }
         
@@ -87,7 +87,7 @@ enum Value: RawRepresentable {
         }
     }
 
-    enum SSDP: String {
+    public enum SSDP: String {
         case alive = "alive"
         case byebye = "byebye"
     }

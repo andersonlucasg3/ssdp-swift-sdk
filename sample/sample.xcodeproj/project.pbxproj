@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,7 @@
 		7163F73F234E4A5E00E7DEFD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7163F73E234E4A5E00E7DEFD /* Assets.xcassets */; };
 		7163F742234E4A5E00E7DEFD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7163F741234E4A5E00E7DEFD /* Preview Assets.xcassets */; };
 		7163F745234E4A5E00E7DEFD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7163F743234E4A5E00E7DEFD /* LaunchScreen.storyboard */; };
+		7163F74E234E4B2500E7DEFD /* SSDP in Frameworks */ = {isa = PBXBuildFile; productRef = 7163F74D234E4B2500E7DEFD /* SSDP */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7163F74E234E4B2500E7DEFD /* SSDP in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +93,9 @@
 			dependencies = (
 			);
 			name = sample;
+			packageProductDependencies = (
+				7163F74D234E4B2500E7DEFD /* SSDP */,
+			);
 			productName = sample;
 			productReference = 7163F735234E4A5B00E7DEFD /* sample.app */;
 			productType = "com.apple.product-type.application";
@@ -119,6 +124,9 @@
 				Base,
 			);
 			mainGroup = 7163F72C234E4A5B00E7DEFD;
+			packageReferences = (
+				7163F74C234E4B2500E7DEFD /* XCRemoteSwiftPackageReference "ssdp-swift-sdk" */,
+			);
 			productRefGroup = 7163F736234E4A5B00E7DEFD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -342,6 +350,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7163F74C234E4B2500E7DEFD /* XCRemoteSwiftPackageReference "ssdp-swift-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:andersonlucasg3/ssdp-swift-sdk.git";
+			requirement = {
+				branch = develop;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7163F74D234E4B2500E7DEFD /* SSDP */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7163F74C234E4B2500E7DEFD /* XCRemoteSwiftPackageReference "ssdp-swift-sdk" */;
+			productName = SSDP;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7163F72D234E4A5B00E7DEFD /* Project object */;
 }

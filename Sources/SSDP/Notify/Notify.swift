@@ -1,9 +1,9 @@
-class NotifyRequest: Request {
+public class NotifyRequest: Request {
 //    override var shouldHandleResponses: Bool { return false }
     
-    weak var delegate: NotifyDelegateProtocol?
+    public weak var delegate: NotifyDelegateProtocol?
     
-    override func requestBody(headers: Headers) throws -> String {
+    override open func requestBody(headers: Headers) throws -> String {
         guard let host = headers[.host]?.rawValue else { throw RequestError.missing(header: .host) }
         guard let cc = headers[.cacheControl]?.rawValue else { throw RequestError.missing(header: .cacheControl) }
         guard let loc = headers[.location]?.rawValue else { throw RequestError.missing(header: .location) }
@@ -22,7 +22,7 @@ class NotifyRequest: Request {
             .appending("USN:\(usn)\r\n\r\n")
     }
     
-    override func received(response: String, from host: String) throws {
+    override open func received(response: String, from host: String) throws {
         Log.debug(message: "Response: \(response) \n From: \(host)")
     }
 }

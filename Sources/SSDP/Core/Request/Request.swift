@@ -4,7 +4,7 @@ import struct Foundation.TimeInterval
 import struct Foundation.Date
 import struct Foundation.Data
 
-class Request {
+open class Request {
     fileprivate let responsesDuration: TimeInterval = 10 // seconds
     
     fileprivate var socket: Socket?

@@ -1,4 +1,4 @@
-enum Header: String {
+public enum Header: String {
     case host = "HOST"
     case nt = "NT"
     case nts = "NTS"
@@ -8,4 +8,4 @@ enum Header: String {
     case server = "SERVER"
 }
 
-typealias Headers = [Header: Value]
+public typealias Headers = [Header: Value]

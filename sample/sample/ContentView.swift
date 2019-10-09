@@ -7,10 +7,15 @@
 //
 
 import SwiftUI
+import SSDP
 
 struct ContentView: View {
     var body: some View {
-        Text("Hello World")
+        VStack() {
+            Button.init("Send Notify request") {
+//                Notify
+            }
+        }
     }
 }
 
