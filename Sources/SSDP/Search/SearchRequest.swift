@@ -41,7 +41,7 @@ public extension SearchRequest {
         public enum RTU {
             case search(nt: Value.NT)
             
-            func build() -> SearchRequest {
+            public func build() -> SearchRequest {
                 switch self {
                 case .search(let nt):
                     return Builder()

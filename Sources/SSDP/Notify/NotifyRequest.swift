@@ -57,7 +57,7 @@ public extension NotifyRequest {
             case alive(location: String, nt: Value.NT, uuid: String, duration: UInt16, server: Value.Server = .this)
             case byebye(nt: Value.NT, uuid: String)
             
-            func build() -> NotifyRequest {
+            public func build() -> NotifyRequest {
                 switch self {
                 case .alive(let location, let nt, let uuid, let duration, let server):
                     return Builder()
