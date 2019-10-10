@@ -11,8 +11,8 @@ public class AliveSender: Sender<AliveListener> {
         
     internal init() { super.init(sendCount: 3) }
     
-    override open func requestBody() -> Data {
-        let body = SenderBody.init()
+    override open func requestBody() -> MessageBody {
+        let body = MessageBody.init()
                 
         body.set(method: .notify)
         body.add(header: .host, with: .host(value: .address))
@@ -23,11 +23,7 @@ public class AliveSender: Sender<AliveListener> {
         body.add(header: .server, with: .server(value: server))
         body.add(header: .usn, with: .usn(value: usn))
         
-        let formatted = body.build()
-        
-        Log.debug(message: "Sending request \n\(formatted)")
-        
-        return formatted.data(using: .utf8)!
+        return body
     }
 }
 

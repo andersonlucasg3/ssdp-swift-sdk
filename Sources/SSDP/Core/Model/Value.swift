@@ -39,6 +39,7 @@ public enum Value {
     
     public enum Server: RawRepresentable {
         case this
+        case custom(os: String, osv: String, p: String, pv: String)
         
         public var rawValue: String {
             switch self {
@@ -48,15 +49,21 @@ public enum Value {
                 let v = UIDevice.current.systemVersion
                 let p = product()
                 let pv = version()
-                return "\(os)/\(v) UPnP/1.0 \(p)/\(pv)"
+                return toString(os, v, p, pv)
                 #else
-                return "macOS/15 UPnP/1.0 test/1.0"
+                return toString("macOS", "10.15", "Sample", "1.0")
                 #endif
+            case .custom(let os, let osv, let p, let pv):
+                return toString(os, osv, p, pv)
             }
         }
         
         public init?(rawValue: String) {
             return nil
+        }
+        
+        private func toString(_ os: String, _ osv: String, _ p: String, _ pv: String) -> String {
+            return "\(os)/\(osv) UPnP/1.0 \(p)/\(pv)"
         }
         
         private func product() -> String {

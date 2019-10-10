@@ -11,5 +11,3 @@ public enum Header: String {
     case st = "ST"
     case userAgent = "USER-AGENT"
 }
-
-public typealias Headers = [Header: Value]

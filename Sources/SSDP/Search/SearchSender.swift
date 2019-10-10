@@ -8,22 +8,18 @@ public class SearchSender: Sender<SearchListener> {
         super.init()
     }
     
-    public override func requestBody() -> Data {
-        let formatter = SenderBody.init()
+    public override func requestBody() -> MessageBody {
+        let body = MessageBody.init()
         
-        formatter.set(method: .mSearch)
-        formatter.add(header: .host, with: .host(value: .address))
-        formatter.add(header: .man, with: .man(value: .ssdp(ssdp: .discover)))
-        formatter.add(header: .mx, with: .mx(value: .delay(seconds: 3)))
-        formatter.add(header: .userAgent, with: .userAgent(value: .this))
-        if let ssdp = ssdp { formatter.add(header: .st, with: .st(value: .ssdp(ssdp: ssdp))) }
-        else { formatter.add(header: .st, with: .st(value: .nt(nt: nt))) }
+        body.set(method: .mSearch)
+        body.add(header: .host, with: .host(value: .address))
+        body.add(header: .man, with: .man(value: .ssdp(ssdp: .discover)))
+        body.add(header: .mx, with: .mx(value: .delay(seconds: 3)))
+        body.add(header: .userAgent, with: .userAgent(value: .this))
+        if let ssdp = ssdp { body.add(header: .st, with: .st(value: .ssdp(ssdp: ssdp))) }
+        else { body.add(header: .st, with: .st(value: .nt(nt: nt))) }
         
-        let formatted = formatter.build()
-        
-        Log.debug(message: "Sending request \n\(formatted)")
-        
-        return formatted.data(using: .utf8)!
+        return body
     }
 }
 

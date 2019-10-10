@@ -20,9 +20,14 @@ open class Sender<ListenerType> where ListenerType: Listener {
         Log.debug(message: "Sender on address: \(addr.host):\(addr.port)")
         Log.debug(message: "Sender count: \(sendCount)")
         
-        let body = requestBody()
+        let senderBody = requestBody()
         
-        multipleShots(body: body, to: addr)
+        let body = senderBody.build()
+        
+        Log.debug(message: "Sending request \n\(String.init(data: body, encoding: .utf8) ?? "")")
+        
+        let data = body
+        multipleShots(body: data, to: addr)
     }
     
     public func listen(addr: Address) {
@@ -45,5 +50,5 @@ open class Sender<ListenerType> where ListenerType: Listener {
         listener.socket?.send(data, toAddress: addr.host, andPort: UInt(addr.port))
     }
     
-    open func requestBody() -> Data { return .init() }
+    open func requestBody() -> MessageBody { return .init() }
 }

@@ -6,6 +6,8 @@ import Socket
 
 open class Listener: NSObject {
     fileprivate(set) internal var socket: SSDPSocketListener?
+    fileprivate var buffer = Data.init()
+    fileprivate let delimiterData = "\r\n\r\n".data(using: .utf8)!
         
     public required override init() { super.init() }
     
@@ -19,7 +21,7 @@ open class Listener: NSObject {
         socket?.open()
     }
     
-    func received(response: String, from host: String) throws {
+    func received(response: Data, from host: String) throws {
         throw Error.notImplemented(name: #function)
     }
     
@@ -29,23 +31,42 @@ open class Listener: NSObject {
     }
         
     fileprivate func read(data: Data, from addr: Address) {
-        guard let response = String.init(data: data, encoding: .utf8) else {
-            Log.debug(message: "Received data is not string...")
-            return
+        if let bufferDelimiterRange = self.checkForDelimiter(in: buffer) {
+            let packageData = self.packageData(from: bufferDelimiterRange)
+            
+            self.sliceBuffer(for: bufferDelimiterRange)
+            
+            try! received(response: packageData, from: addr.host)
         }
-        Log.debug(message: "Received \n \(response) \n from \(addr.host)")
-        try! received(response: response, from: addr.host)
     }
     
     fileprivate func createSocket(_ port: UInt16, _ host: String) {
         socket = SSDPSocketListener.init(address: host, andPort: Int(port))
         socket?.delegate = self
     }
+    
+    fileprivate func checkForDelimiter(in data: Data) -> Range<Int>? {
+        return data.range(of: delimiterData)
+    }
+    
+    fileprivate func packageRange(from delimiter: Range<Int>) -> Range<Int> {
+        return 0..<delimiter.endIndex
+    }
+    
+    fileprivate func packageData(from delimiter: Range<Int>) -> Data {
+        return buffer.subdata(in: packageRange(from: delimiter))
+    }
+
+    fileprivate func sliceBuffer(for delimiter: Range<Int>) {
+        buffer = buffer.subdata(in: delimiter.endIndex..<buffer.count)
+    }
+
 }
 
 extension Listener: SocketListenerDelegate {
     public func socket(_ aSocket: SSDPSocketListener!, didReceive aData: Data!, fromAddress anAddress: String!) {
-        read(data: aData, from: .init(host: anAddress, port: 0))
+        buffer.append(aData)
+        read(data: buffer, from: .init(host: anAddress, port: 0))
     }
     
     public func socket(_ aSocket: SSDPSocketListener!, didEncounterError anError: Swift.Error!) {

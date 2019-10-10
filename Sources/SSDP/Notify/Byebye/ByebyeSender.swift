@@ -6,20 +6,16 @@ public class ByebyeSender: Sender<Listener> {
         
     internal init() { super.init(sendCount: 1) }
     
-    public override func requestBody() -> Data {
-        let formatter = SenderBody.init()
+    public override func requestBody() -> MessageBody {
+        let body = MessageBody.init()
         
-        formatter.set(method: .notify)
-        formatter.add(header: .host, with: .host(value: .address))
-        formatter.add(header: .nt, with: .nt(value: nt))
-        formatter.add(header: .nts, with: .nts(value: .sspd(value: .byebye)))
-        formatter.add(header: .usn, with: .usn(value: .uuid(uuid: uuid)))
+        body.set(method: .notify)
+        body.add(header: .host, with: .host(value: .address))
+        body.add(header: .nt, with: .nt(value: nt))
+        body.add(header: .nts, with: .nts(value: .sspd(value: .byebye)))
+        body.add(header: .usn, with: .usn(value: .uuid(uuid: uuid)))
         
-        let formatted = formatter.build()
-        
-        Log.debug(message: "Sending request \n\(formatted)")
-        
-        return formatted.data(using: .utf8)!
+        return body
     }
 }
 
