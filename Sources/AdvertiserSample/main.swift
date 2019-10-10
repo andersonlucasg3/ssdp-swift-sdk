@@ -3,8 +3,9 @@ import Foundation
 
 let uuid = UUID.init().uuidString
 
-let alive = AliveRequest.RTU.alive(location: getAddress(for: .wifi) ?? getAddress(for: .ethernet) ?? "0.0.0.0:0",
-                                   nt: .app(domain: "com-globo-tvos-receiver", name: "globo-play"),
+let address = getAddress(for: .wifi) ?? getAddress(for: .ethernet) ?? "0.0.0.0:0"
+let alive = AliveRequest.RTU.alive(location: "ws://\(address)/receiver",
+                                   nt: .urn(domain: "receiver-tvos-globo-com", type: "appletv", version: 1),
                                    uuid: uuid,
                                    duration: 10).build()
 

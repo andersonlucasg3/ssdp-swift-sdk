@@ -17,7 +17,7 @@ public enum Value {
     case st(value: ST)
         
     public enum NT {
-        case app(domain: String, name: String)
+        case urn(domain: String, type: String, version: UInt16)
         case ssdp(ssdp: SSDP)
     }
     
@@ -45,9 +45,9 @@ public enum Value {
                 let v = UIDevice.current.systemVersion
                 let p = product()
                 let pv = version()
-                return "\(os)/\(v), UPnP/1.0, \(p)/\(pv)"
+                return "\(os)/\(v) UPnP/1.0 \(p)/\(pv)"
                 #else
-                return "macOS/15, UPnP/1.0, test/1.0"
+                return "macOS/15 UPnP/1.0 test/1.0"
                 #endif
             }
         }

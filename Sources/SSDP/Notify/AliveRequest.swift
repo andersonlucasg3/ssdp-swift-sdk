@@ -6,10 +6,8 @@ public class AliveRequest: Request {
     fileprivate var location: String!
     fileprivate var duration: UInt16!
     fileprivate var server: Value.Server!
-    
-    public override var shouldHandleResponses: Bool { return false }
-    
-    internal init() { super.init(sendCount: 3) }
+        
+    internal init() { super.init(sendCount: 3, listenOn: Int(Host.port.rawValue)!) }
     
     override open func requestBody() throws -> Data {
         let formatter = RequestBodyFormatter.init()
@@ -28,6 +26,10 @@ public class AliveRequest: Request {
         Log.debug(message: "Sending request \n\(formatted)")
         
         return formatted.data(using: .utf8)!
+    }
+    
+    public override func received(response: String, from host: String) throws {
+        
     }
 }
 

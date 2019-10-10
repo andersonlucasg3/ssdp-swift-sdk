@@ -3,7 +3,7 @@ import Foundation
 
 class DeviceController {
     fileprivate let myUuid = UUID.init().uuidString
-    fileprivate let urn = Value.NT.urn(domain: "org-teste", type: "dial", version: 1)
+    fileprivate let urn = Value.NT.app(domain: "com-globo-tvos-receiver", name: "globo-play")
     
     fileprivate var byebyeRequest: ByebyeRequest?
     fileprivate var aliveRequest: AliveRequest?
@@ -37,7 +37,7 @@ class DeviceController {
     
     func search() {
         searchRequest = SearchRequest.Builder.init()
-            .set(nt: .urn(domain: "schemas-upnp-org", type: "InternetGatewayDevice", version: 1))
+            .set(nt: .ssdp(ssdp: .all))
             .build()
         
         doSearch()

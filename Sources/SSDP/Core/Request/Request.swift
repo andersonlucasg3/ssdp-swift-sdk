@@ -10,11 +10,13 @@ open class Request {
     fileprivate var socket: Socket?
     fileprivate var startTime: TimeInterval = 0
     fileprivate var sendCount: Int
+    fileprivate var listenPort: Int
     
     open var shouldHandleResponses: Bool { return true }
     
-    internal init(sendCount: Int) {
+    internal init(sendCount: Int, listenOn port: Int = 0) {
         self.sendCount = sendCount
+        self.listenPort = port
     }
     
     public func request() throws {
@@ -22,7 +24,7 @@ open class Request {
         
         try createSocket()
         
-        try socket?.listen(on: 0)
+        try socket?.listen(on: listenPort)
         
         guard let port = Int32(Host.port.rawValue) else { throw RequestError.invalidPort(value: Host.port.rawValue) }
         guard let address = Socket.createAddress(for: Host.ip.rawValue, on: port) else { throw RequestError.invalidIP(value: Host.ip.rawValue) }
