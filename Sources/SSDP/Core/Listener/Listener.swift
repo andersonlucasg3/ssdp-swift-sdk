@@ -19,7 +19,7 @@ open class Listener {
         readResponse()
     }
     
-    func stop() {
+    public func stop() {
         close()
     }
     

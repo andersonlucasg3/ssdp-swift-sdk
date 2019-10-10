@@ -62,6 +62,8 @@ class DeviceController {
     
     func stopSearch() {
         searchRequest = nil
+        searchListener.stop()
+        searchListener = nil
     }
     
     // MARK: - NotifyRequestDelegate
