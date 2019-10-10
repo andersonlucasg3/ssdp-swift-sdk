@@ -24,12 +24,12 @@ let package = Package(
     ],
     dependencies: [
          .package(url: "https://github.com/IBM-Swift/BlueSocket", from: "1.0.0"),
-         .package(url: "https://github.com/pierrickrouxel/SSDPClient", .branch("master"))
+         .package(url: "https://github.com/PerfectlySoft/Perfect-Net", from: "3.0.0"),
     ],
     targets: [
         .target(
             name: "SSDP",
-            dependencies: [ "Socket" ]
+            dependencies: [ "Socket", "PerfectNet" ]
         ),
         .target(
             name: "AdvertiserSample",
@@ -38,13 +38,6 @@ let package = Package(
         .target(
             name: "SearcherSample",
             dependencies: [ "SSDP" ]
-        ),
-        .target(
-            name: "SSDPClientSample",
-            dependencies: [ "SSDPClient" ],
-            swiftSettings: [
-                .define("DEBUG", .when(platforms: nil, configuration: .debug))
-            ]
         )
     ]
 )

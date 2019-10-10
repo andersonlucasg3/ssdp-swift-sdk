@@ -7,11 +7,13 @@ import struct Foundation.TimeInterval
 open class Listener {
     fileprivate var socket: Socket?
         
-    public init() throws {
-        try createSocket()
-    }
+    public init() { }
     
     func listen(on port: Int) throws {
+        guard socket == nil else { throw Error.alreadyRequesting }
+        
+        try createSocket()
+        
         Log.debug(message: "\(#function) port: \(port)")
         
         try socket?.listen(on: port)
@@ -28,7 +30,7 @@ open class Listener {
     }
     
     fileprivate func createSocket() throws {
-        socket = try .create(family: .inet, type: .datagram, proto: .udp)
+        socket = try .create(type: .datagram, proto: .udp)
         try socket?.setBlocking(mode: false)
         socket?.readBufferSize = 1024 * 10
     }

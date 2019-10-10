@@ -3,7 +3,7 @@ import Foundation
 
 let searcher = SearchSender.RTU.search(nt: .ssdp(ssdp: .all)).build()
 
-let listener = try SearchListener.init()
+let listener = SearchListener.init()
 try listener.listen()
 
 func request() {

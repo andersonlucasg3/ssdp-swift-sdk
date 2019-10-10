@@ -46,6 +46,9 @@ class DeviceController {
             .set(nt: .ssdp(ssdp: .all))
             .build()
         
+        searchListener = try! .init()
+        try! searchListener?.listen()
+        
         doSearch()
     }
     
@@ -62,7 +65,7 @@ class DeviceController {
     
     func stopSearch() {
         searchRequest = nil
-        searchListener.stop()
+        searchListener?.stop()
         searchListener = nil
     }
     
