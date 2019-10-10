@@ -55,7 +55,7 @@ public enum Value: Equatable {
     }
 
     public enum CacheControl {
-        case maxAge(seconds: UInt16)
+        case maxAge(seconds: Int)
     }
     
     public enum Server: RawRepresentable {
@@ -108,7 +108,7 @@ public enum Value: Equatable {
     }
     
     public enum MX {
-        case delay(seconds: UInt16)
+        case delay(seconds: Int)
     }
     
     public enum ST: Equatable {

@@ -3,7 +3,7 @@ import struct Foundation.Data
 public class SearchSender: Sender<SearchListener> {
     fileprivate var nt: Value.NT!
     fileprivate var ssdp: Value.SSDP!
-    fileprivate var delay: UInt16 = 120
+    fileprivate var delay: Int = 120
     
     internal init() {
         super.init()
@@ -32,7 +32,7 @@ public extension SearchSender {
         
         public func set(nt: Value.NT) -> Builder { request.nt = nt; return self }
         public func set(ssdp: Value.SSDP) -> Builder { request.ssdp = ssdp; return self }
-        public func set(delay: UInt16) -> Builder { request.delay = delay; return self }
+        public func set(delay: Int) -> Builder { request.delay = delay; return self }
         
         public func build() -> SearchSender {
             return request
@@ -40,8 +40,8 @@ public extension SearchSender {
     }
     
     enum RTU {
-        case search(nt: Value.NT, delay: UInt16)
-        case searchAll(delay: UInt16)
+        case search(nt: Value.NT, delay: Int)
+        case searchAll(delay: Int)
         
         public func build() -> SearchSender {
             switch self {

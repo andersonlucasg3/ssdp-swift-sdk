@@ -158,7 +158,7 @@ public class MessageBody {
         case .host: return .host(value: .custom(address: value))
         case .location: return .location(value: value)
         case .man: return .man(value: man(value: value))
-        case .mx: return .mx(value: .delay(seconds: UInt16(value)!))
+        case .mx: return .mx(value: .delay(seconds: Int(value)!))
         case .nt: if let nt = nt(value: value) { return .nt(value: nt) }
         case .nts: return .nts(value: .sspd(value: ssdp(value: value)))
         case .server: if let server = server(value: value) { return .server(value: server) }
@@ -230,6 +230,6 @@ public class MessageBody {
     }
     
     fileprivate func cacheControl(value: String) -> Value.CacheControl {
-        return .maxAge(seconds: UInt16(value.split(separator: "=").last!)!)
+        return .maxAge(seconds: Int(value.split(separator: "=").last!)!)
     }
 }

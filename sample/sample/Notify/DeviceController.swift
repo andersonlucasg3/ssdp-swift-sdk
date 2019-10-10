@@ -34,29 +34,20 @@ class DeviceController: ListenerDelegate {
     
     func search() {
         searchRequest?.stop()
+        searchListener?.stop()
         
         searchRequest = SearchSender.Builder.init()
             .set(nt: .ssdp(ssdp: .all))
             .build()
         
         searchRequest?.listenerDelegate = self
-        searchRequest?.listen(addr: .init(host: Host.ip, port: Host.port))
+        searchRequest?.listen(addr: .init(host: Host.ip, port: 0))
         
         searchListener = .init()
         searchListener?.delegate = self
-        searchListener?.listen
+        searchListener?.listen(on: Host.port, and: Host.ip)
         
         searchRequest?.send()
-    }
-    
-    fileprivate func doSearch() {
-        guard searchRequest != nil else { return }
-        
-        
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 12) { [weak self] in
-            self?.doSearch()
-        }
     }
     
     func stopSearch() {

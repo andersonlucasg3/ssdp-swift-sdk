@@ -6,7 +6,7 @@ public class AliveSender: Sender<AliveListener> {
     fileprivate var usn: Value.USN!
     fileprivate var uuid: String!
     fileprivate var location: String!
-    fileprivate var duration: UInt16 = 120
+    fileprivate var duration: Int = 120
     fileprivate var server: Value.Server!
         
     internal init() {
@@ -40,7 +40,7 @@ public extension AliveSender {
         public func set(location: String) -> Builder { request.location = location; return self }
         public func set(nt: Value.NT) -> Builder { request.nt = nt; return self }
         public func set(uuid: String) -> Builder { request.uuid = uuid; return self }
-        public func set(duration: UInt16) -> Builder { request.duration = duration; return self }
+        public func set(duration: Int) -> Builder { request.duration = duration; return self }
         public func set(server: Value.Server) -> Builder { request.server = server; return self }
         public func set(usn: Value.USN) -> Builder { request.usn = usn; return self }
         
@@ -50,7 +50,7 @@ public extension AliveSender {
     }
     
     enum RTU {
-        case alive(location: String, nt: Value.NT, usn: Value.USN, uuid: String, duration: UInt16, server: Value.Server = .this)
+        case alive(location: String, nt: Value.NT, usn: Value.USN, uuid: String, duration: Int, server: Value.Server = .this)
         
         public func build() -> AliveSender {
             switch self {

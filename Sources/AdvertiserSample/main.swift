@@ -15,6 +15,7 @@ let sender = AliveSender.RTU.alive(location: location,
 class Del: ListenerDelegate {
     func didReceiveMessage(body: MessageBody, from host: String) {
         if body.method == .mSearch {
+            print("Received m search from host: \(host)")
             let rtu = SearchResponseSender.RTU.self
             let sender = rtu.response(duration: 120,
                                       location: location,

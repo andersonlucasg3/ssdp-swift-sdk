@@ -1,7 +1,7 @@
 import Foundation
 
 public class SearchResponseSender: Sender<Listener> {
-    fileprivate var duration: UInt16 = 120
+    fileprivate var duration: Int = 120
     fileprivate var location: String!
     fileprivate var st: Value.ST!
     fileprivate var usn: Value.USN!
@@ -32,7 +32,7 @@ public extension SearchResponseSender {
         
         public init() { sender = .init() }
         
-        public func set(duration: UInt16) -> Builder { sender.duration = duration; return self }
+        public func set(duration: Int) -> Builder { sender.duration = duration; return self }
         public func set(location: String) -> Builder { sender.location = location; return self }
         public func set(st: Value.ST) -> Builder { sender.st = st; return self }
         public func set(usn: Value.USN) -> Builder { sender.usn = usn; return self }
@@ -43,7 +43,7 @@ public extension SearchResponseSender {
     }
     
     enum RTU {
-        case response(duration: UInt16 = 120, location: String, st: Value.ST, usn: Value.USN)
+        case response(duration: Int = 120, location: String, st: Value.ST, usn: Value.USN)
         
         public func build() -> SearchResponseSender {
             switch self {
