@@ -1,18 +1,21 @@
 import struct Foundation.Data
 
-public class SearchSender: Sender {
+public class SearchSender: Sender<SearchListener> {
     fileprivate var nt: Value.NT!
     fileprivate var ssdp: Value.SSDP!
     
-    internal init() { super.init() }
+    internal init() {
+        super.init()
+    }
     
-    public override func requestBody() throws -> Data {
+    public override func requestBody() -> Data {
         let formatter = SenderBody.init()
         
         formatter.set(method: .mSearch)
         formatter.add(header: .host, with: .host(value: .address))
         formatter.add(header: .man, with: .man(value: .ssdp(ssdp: .discover)))
         formatter.add(header: .mx, with: .mx(value: .delay(seconds: 3)))
+        formatter.add(header: .userAgent, with: .userAgent(value: .this))
         if let ssdp = ssdp { formatter.add(header: .st, with: .st(value: .ssdp(ssdp: ssdp))) }
         else { formatter.add(header: .st, with: .st(value: .nt(nt: nt))) }
         

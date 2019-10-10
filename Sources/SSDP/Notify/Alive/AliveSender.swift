@@ -1,7 +1,7 @@
 import struct Foundation.Data
 import typealias Dispatch.os_block_t
 
-public class AliveSender: Sender {
+public class AliveSender: Sender<AliveListener> {
     fileprivate var nt: Value.NT!
     fileprivate var usn: Value.USN!
     fileprivate var uuid: String!
@@ -11,11 +11,7 @@ public class AliveSender: Sender {
         
     internal init() { super.init(sendCount: 3) }
     
-    public override func send(completion: @escaping os_block_t = {}) throws {
-        try super.send()
-    }
-    
-    override open func requestBody() throws -> Data {
+    override open func requestBody() -> Data {
         let body = SenderBody.init()
                 
         body.set(method: .notify)

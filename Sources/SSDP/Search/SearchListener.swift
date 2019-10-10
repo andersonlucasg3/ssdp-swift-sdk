@@ -1,6 +1,6 @@
 public class SearchListener: Listener {
-    public func listen() throws {
-        try super.listen(on: 0)
+    public func listen() {
+        super.listen(on: Host.port, and: Host.ip)
     }
     
     override func received(response: String, from host: String) throws {

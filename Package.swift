@@ -6,7 +6,8 @@ let package = Package(
     name: "SSDP",
     platforms: [
         .iOS(.v10),
-        .tvOS(.v11)
+        .tvOS(.v11),
+        .macOS(.v10_14)
     ],
     products: [
         .library(
@@ -23,13 +24,15 @@ let package = Package(
         )
     ],
     dependencies: [
-         .package(url: "https://github.com/IBM-Swift/BlueSocket", from: "1.0.0"),
-         .package(url: "https://github.com/PerfectlySoft/Perfect-Net", from: "3.0.0"),
+         
     ],
     targets: [
         .target(
+            name: "Socket"
+        ),
+        .target(
             name: "SSDP",
-            dependencies: [ "Socket", "PerfectNet" ]
+            dependencies: [ "Socket" ]
         ),
         .target(
             name: "AdvertiserSample",

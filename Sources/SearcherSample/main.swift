@@ -3,18 +3,16 @@ import Foundation
 
 let searcher = SearchSender.RTU.search(nt: .ssdp(ssdp: .all)).build()
 
-let listener = SearchListener.init()
-try listener.listen()
+searcher.listen(addr: Address.init(host: Host.ip, port: Host.port))
 
-func request() {
-    do { try searcher.send() }
-    catch { print("Deu merda: \(error)") }
-    
-    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-        request()
-    }
-}
-
-request()
+//func request() {
+//    searcher.send()
+//    
+//    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+//        request()
+//    }
+//}
+//
+//request()
 
 dispatchMain()

@@ -35,6 +35,7 @@ class SenderBody {
         case .man(let value): return from(man: value)
         case .mx(let value): return from(mx: value)
         case .st(let value): return from(st: value)
+        case .userAgent(let value): return value.rawValue
         }
     }
     

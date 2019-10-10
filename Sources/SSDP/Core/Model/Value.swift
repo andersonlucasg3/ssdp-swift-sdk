@@ -15,6 +15,7 @@ public enum Value {
     case man(value: MAN)
     case mx(value: MX)
     case st(value: ST)
+    case userAgent(value: Server)
         
     public enum NT {
         case upnp

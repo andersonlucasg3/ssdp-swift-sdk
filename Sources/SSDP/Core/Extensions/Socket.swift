@@ -1,4 +1,3 @@
-import Socket
 import Foundation
 
 public enum Network: String {

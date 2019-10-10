@@ -1,70 +1,49 @@
-import Socket
 import Dispatch
 import struct Foundation.TimeInterval
 import struct Foundation.Date
 import struct Foundation.Data
+import Socket
 
-open class Sender {
-    fileprivate var socket: Socket?
+open class Sender<ListenerType> where ListenerType: Listener {
+    fileprivate var listener: ListenerType
+    
     fileprivate var sendCount: Int
     
     internal init(sendCount: Int = 1) {
+        listener = .init()
         self.sendCount = sendCount
     }
     
-    public func send(completion: @escaping os_block_t = {}) throws {
-        guard socket == nil else { throw Error.alreadyRequesting }
+    public func send() {
+        let addr = Address.init(host: Host.ip, port: Host.port)
         
-        try createSocket()
-        
-        let port = Int32(Host.port)
-        guard let address = Socket.createAddress(for: Host.ip.rawValue, on: port) else { throw Error.invalidIP(value: Host.ip.rawValue) }
-        
-        Log.debug(message: "Sender on address: \(Host.ip.rawValue):\(Host.port)")
+        Log.debug(message: "Sender on address: \(addr.host):\(addr.port)")
         Log.debug(message: "Sender count: \(sendCount)")
         
-        let body = try requestBody()
+        let body = requestBody()
         
-        multipleShots(body: body, to: address) { [weak self] in
-            guard let self = self else { return }
-            
-            completion()
-                
-            self.close()
-        }
+        multipleShots(body: body, to: addr)
     }
     
-    fileprivate func close() {
-        socket?.close()
-        socket = nil
+    public func listen(addr: Address) {
+        listener.listen(on: addr.port, and: addr.host)
     }
     
-    fileprivate func multipleShots(body: Data, to address: Socket.Address, completion: @escaping os_block_t) {
-        let sendBlock = { [weak self] in
-            // TODO: handle possibility to write partial data
-            _ = try? self?.socket?.write(from: body, to: address)
+    public func stop() {
+        listener.stop()
+    }
+    
+    fileprivate func multipleShots(body: Data, to address: Address) {
+        (1..<sendCount).forEach { _ in
+            send(data: body, to: address)
         }
         
-        sendBlock()
-        
-        let sendCount = self.sendCount
-        (1...sendCount).forEach { (index) in
-            DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(index)) {
-                sendBlock()
-                
-                if index == sendCount {
-                    DispatchQueue.main.async(execute: completion)
-                }
-            }
-        }
+        send(data: body, to: address)
     }
     
-    open func requestBody() throws -> Data {
-        throw Error.notImplemented(name: #function)
+    fileprivate func send(data: Data, to addr: Address) {
+        listener.socket?.send(data, toAddress: addr.host, andPort: UInt(addr.port))
     }
     
-    fileprivate func createSocket() throws {
-        socket = try .create(type: .datagram, proto: .udp)
-        try socket?.setBlocking(mode: false)
-    }
+    open func requestBody() -> Data { return .init() }
 }

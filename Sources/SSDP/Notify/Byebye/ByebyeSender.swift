@@ -1,12 +1,12 @@
 import struct Foundation.Data
 
-public class ByebyeSender: Sender {
+public class ByebyeSender: Sender<Listener> {
     fileprivate var nt: Value.NT!
     fileprivate var uuid: String!
         
     internal init() { super.init(sendCount: 1) }
     
-    public override func requestBody() throws -> Data {
+    public override func requestBody() -> Data {
         let formatter = SenderBody.init()
         
         formatter.set(method: .notify)
