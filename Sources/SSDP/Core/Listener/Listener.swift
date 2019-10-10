@@ -17,7 +17,7 @@ open class Listener: NSObject {
     
     public required override init() { super.init() }
     
-    func listen(on port: UInt16, and interface: String = "0.0.0.0") {
+    public func listen(on port: UInt16, and interface: String = "0.0.0.0") {
         guard socket == nil else { return }
                 
         createSocket(port, interface)
