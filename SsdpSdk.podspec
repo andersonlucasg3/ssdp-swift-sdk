@@ -18,4 +18,6 @@ Simple implementation of advertising and device discovery over SSDP.
 
   s.source_files = 'Sources/SSDP/**/*.{swift}',
                     'Sources/Socket/**/*.{m,h}'
+
+  s.dependency 'BlueSocket'
 end
