@@ -10,4 +10,6 @@ public enum Header: String {
     case mx = "MX"
     case st = "ST"
     case userAgent = "USER-AGENT"
+    case date = "DATE"
+    case ext = "EXT"
 }

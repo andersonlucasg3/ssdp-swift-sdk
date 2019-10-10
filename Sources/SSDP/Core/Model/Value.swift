@@ -4,8 +4,10 @@ import class UIKit.UIDevice
 #endif
 import class Foundation.Bundle
 
-public enum Value {
+public enum Value: Equatable {
     case host(value: Host)
+    case date(value: TimeInterval)
+    case ext
     case nt(value: NT)
     case nts(value: NTS)
     case location(value: String)
@@ -17,7 +19,26 @@ public enum Value {
     case st(value: ST)
     case userAgent(value: Server)
         
-    public enum NT {
+    public static func == (lhs: Value, rhs: Value) -> Bool {
+        switch lhs {
+        case .cacheControl: if case .cacheControl = rhs { return true }
+        case .host: if case .host = rhs { return true }
+        case .date: if case .date = rhs { return true }
+        case .ext: if case .ext = rhs { return true }
+        case .nt: if case .nt = rhs { return true }
+        case .nts: if case .nts = rhs { return true }
+        case .location: if case .location = rhs { return true }
+        case .server: if case .server = rhs { return true }
+        case .usn: if case .usn = rhs { return true }
+        case .man: if case .man = rhs { return true }
+        case .mx: if case .mx = rhs { return true }
+        case .st: if case .st = rhs { return true }
+        case .userAgent: if case .userAgent = rhs { return true }
+        }
+        return false
+    }
+    
+    public enum NT: Equatable {
         case upnp
         case urn(domain: String, type: String, version: UInt16)
         case ssdp(ssdp: SSDP)
@@ -90,7 +111,7 @@ public enum Value {
         case delay(seconds: UInt16)
     }
     
-    public enum ST {
+    public enum ST: Equatable {
         case nt(nt: NT)
         case ssdp(ssdp: SSDP)
     }

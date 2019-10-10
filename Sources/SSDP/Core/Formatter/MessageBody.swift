@@ -1,8 +1,8 @@
 import Foundation
 
 public class MessageBody {
-    private(set) var method: Method!
-    private(set) var headers: [(key: Header, value: Value)] = []
+    public private(set) var method: Method!
+    public private(set) var headers: Dictionary<Header, Value> = [:]
     
     public init() { }
     
@@ -17,19 +17,23 @@ public class MessageBody {
     }
     
     public func add(header key: Header, with value: Value) {
-        if let index = headers.firstIndex(where: { $0.key == key }) {
-            headers[index] = (key, value)
-        } else {
-            headers.append((key, value))
-        }
+        headers[key] = value
     }
     
     // MARK: - Build
     
     public func build() -> Data {
-        let request = CFHTTPMessageCreateRequest(nil, method.rawValue as CFString,
+        let request: Unmanaged<CFHTTPMessage>
+        if case .httpOk = method {
+            request = CFHTTPMessageCreateResponse(nil, 200,
+                                                  "OK" as CFString,
+                                                  kCFHTTPVersion1_1)
+        } else {
+            request = CFHTTPMessageCreateRequest(nil, method.rawValue as CFString,
                                                  URL.init(string: "*")! as CFURL,
                                                  kCFHTTPVersion1_1)
+        }
+        
         for header in headers {
             CFHTTPMessageSetHeaderFieldValue(request.takeUnretainedValue(),
                                              header.key.rawValue as CFString,
@@ -56,6 +60,8 @@ public class MessageBody {
         case .mx(let value): return from(mx: value)
         case .st(let value): return from(st: value)
         case .userAgent(let value): return value.rawValue
+        case .date(let value): return "\(value)"
+        case .ext: return ""
         }
     }
     
@@ -133,10 +139,12 @@ public class MessageBody {
                 self.method = Method.init(rawValue: method as String)
             }
             
+            guard self.method != nil else { return false }
+            
             for header in headers {
                 guard let key = Header.init(rawValue: header.key.uppercased()) else { continue }
                 guard let value = value(from: header.value, for: key) else { continue }
-                self.headers.append((key, value))
+                self.headers[key] = value
             }
             
             return true
@@ -153,10 +161,12 @@ public class MessageBody {
         case .mx: return .mx(value: .delay(seconds: UInt16(value)!))
         case .nt: if let nt = nt(value: value) { return .nt(value: nt) }
         case .nts: return .nts(value: .sspd(value: ssdp(value: value)))
-        case .server: return .server(value: server(value: value))
+        case .server: if let server = server(value: value) { return .server(value: server) }
         case .st: return .st(value: st(value: value))
-        case .userAgent: return .userAgent(value: server(value: value))
+        case .userAgent: if let server = server(value: value) { return .userAgent(value: server) }
         case .usn: return .usn(value: usn(value: value))
+        case .date: return .date(value: TimeInterval(value)!)
+        case .ext: return .ext
         }
         return nil
     }
@@ -180,11 +190,14 @@ public class MessageBody {
         return .ssdp(ssdp: ssdp(value: value))
     }
     
-    fileprivate func server(value: String) -> Value.Server {
+    fileprivate func server(value: String) -> Value.Server? {
         let comps = value.replacingOccurrences(of: ",", with: "")
             .components(separatedBy: " ")
         let osComps = comps.first!.components(separatedBy: "/")
         let prodComps = comps.last!.components(separatedBy: "/")
+        
+        guard osComps.count > 1 && prodComps.count > 1 else { return nil }
+        
         return .custom(os: osComps[0], osv: osComps[1], p: prodComps[0], pv: prodComps[1])
     }
     

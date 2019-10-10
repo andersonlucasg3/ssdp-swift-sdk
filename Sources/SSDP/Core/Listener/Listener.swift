@@ -4,11 +4,17 @@ import struct Foundation.Date
 import struct Foundation.TimeInterval
 import Socket
 
+public protocol ListenerDelegate: class {
+    func didReceiveMessage(body: MessageBody, from host: String)
+}
+
 open class Listener: NSObject {
     fileprivate(set) internal var socket: SSDPSocketListener?
     fileprivate var buffer = Data.init()
     fileprivate let delimiterData = "\r\n\r\n".data(using: .utf8)!
         
+    public weak var delegate: ListenerDelegate?
+    
     public required override init() { super.init() }
     
     func listen(on port: UInt16, and interface: String = "0.0.0.0") {
@@ -70,6 +76,6 @@ extension Listener: SocketListenerDelegate {
     }
     
     public func socket(_ aSocket: SSDPSocketListener!, didEncounterError anError: Swift.Error!) {
-        
+        // TODO: check for errors
     }
 }

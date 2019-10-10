@@ -9,13 +9,18 @@ open class Sender<ListenerType> where ListenerType: Listener {
     
     fileprivate var sendCount: Int
     
+    public weak var listenerDelegate: ListenerDelegate? {
+        get { return listener.delegate }
+        set { listener.delegate = newValue }
+    }
+    
     internal init(sendCount: Int = 1) {
         listener = .init()
         self.sendCount = sendCount
     }
     
-    public func send() {
-        let addr = Address.init(host: Host.ip, port: Host.port)
+    public func send(host: String = Host.ip, port: UInt16 = Host.port) {
+        let addr = Address.init(host: host, port: port)
         
         Log.debug(message: "Sender on address: \(addr.host):\(addr.port)")
         Log.debug(message: "Sender count: \(sendCount)")

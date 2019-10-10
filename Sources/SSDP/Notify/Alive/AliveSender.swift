@@ -6,10 +6,12 @@ public class AliveSender: Sender<AliveListener> {
     fileprivate var usn: Value.USN!
     fileprivate var uuid: String!
     fileprivate var location: String!
-    fileprivate var duration: UInt16!
+    fileprivate var duration: UInt16 = 120
     fileprivate var server: Value.Server!
         
-    internal init() { super.init(sendCount: 3) }
+    internal init() {
+        super.init(sendCount: 3)
+    }
     
     override open func requestBody() -> MessageBody {
         let body = MessageBody.init()

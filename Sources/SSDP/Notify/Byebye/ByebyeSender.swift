@@ -4,7 +4,9 @@ public class ByebyeSender: Sender<Listener> {
     fileprivate var nt: Value.NT!
     fileprivate var uuid: String!
         
-    internal init() { super.init(sendCount: 1) }
+    internal init() {
+        super.init()
+    }
     
     public override func requestBody() -> MessageBody {
         let body = MessageBody.init()

@@ -3,6 +3,7 @@ import struct Foundation.Data
 public class SearchSender: Sender<SearchListener> {
     fileprivate var nt: Value.NT!
     fileprivate var ssdp: Value.SSDP!
+    fileprivate var delay: UInt16 = 120
     
     internal init() {
         super.init()
@@ -14,7 +15,7 @@ public class SearchSender: Sender<SearchListener> {
         body.set(method: .mSearch)
         body.add(header: .host, with: .host(value: .address))
         body.add(header: .man, with: .man(value: .ssdp(ssdp: .discover)))
-        body.add(header: .mx, with: .mx(value: .delay(seconds: 3)))
+        body.add(header: .mx, with: .mx(value: .delay(seconds: delay)))
         body.add(header: .userAgent, with: .userAgent(value: .this))
         if let ssdp = ssdp { body.add(header: .st, with: .st(value: .ssdp(ssdp: ssdp))) }
         else { body.add(header: .st, with: .st(value: .nt(nt: nt))) }
@@ -31,6 +32,7 @@ public extension SearchSender {
         
         public func set(nt: Value.NT) -> Builder { request.nt = nt; return self }
         public func set(ssdp: Value.SSDP) -> Builder { request.ssdp = ssdp; return self }
+        public func set(delay: UInt16) -> Builder { request.delay = delay; return self }
         
         public func build() -> SearchSender {
             return request
@@ -38,13 +40,20 @@ public extension SearchSender {
     }
     
     enum RTU {
-        case search(nt: Value.NT)
+        case search(nt: Value.NT, delay: UInt16)
+        case searchAll(delay: UInt16)
         
         public func build() -> SearchSender {
             switch self {
-            case .search(let nt):
+            case .search(let nt, let delay):
                 return Builder()
                     .set(nt: nt)
+                    .set(delay: delay)
+                    .build()
+            case .searchAll(let delay):
+                return Builder()
+                    .set(ssdp: .all)
+                    .set(delay: delay)
                     .build()
             }
         }
