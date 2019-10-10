@@ -17,7 +17,7 @@ public enum Value {
     case st(value: ST)
         
     public enum NT {
-        case urn(domain: String, type: String, version: UInt16)
+        case app(domain: String, name: String)
         case ssdp(ssdp: SSDP)
     }
     

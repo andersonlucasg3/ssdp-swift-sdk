@@ -16,11 +16,15 @@ struct ContentView: View {
         VStack() {
             Button.init("Send Notify request") {
                 self.controller.notify()
-            }.frame(height: 50, alignment: Alignment.center)
+            }.frame(height: 50, alignment: .center)
             
             Button.init("Send Search request") {
                 self.controller.search()
-            }.frame(height: 50, alignment: Alignment.center)
+            }.frame(height: 50, alignment: .center)
+            
+            Button.init("Stop searching") {
+                self.controller.stopSearch()
+            }.frame(height: 50, alignment: .center)
         }
     }
 }

@@ -9,9 +9,7 @@ class DeviceController {
     fileprivate var aliveRequest: AliveRequest?
     fileprivate var searchRequest: SearchRequest?
     
-    init() {
-        
-    }
+    init() { }
     
     func notify() {
 //        let byebye = ByebyeRequest.RTU.self
@@ -39,14 +37,25 @@ class DeviceController {
     
     func search() {
         searchRequest = SearchRequest.Builder.init()
-            .set(ssdp: .all)
+            .set(nt: .urn(domain: "schemas-upnp-org", type: "InternetGatewayDevice", version: 1))
             .build()
         
-        do {
-            try searchRequest?.request()
-        } catch {
-            print("Deu search merda: \(error)")
+        doSearch()
+    }
+    
+    fileprivate func doSearch() {
+        guard searchRequest != nil else { return }
+        
+        do { try searchRequest?.request() }
+        catch { print("Deu search merda: \(error)") }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 12) { [weak self] in
+            self?.doSearch()
         }
+    }
+    
+    func stopSearch() {
+        searchRequest = nil
     }
     
     // MARK: - NotifyRequestDelegate

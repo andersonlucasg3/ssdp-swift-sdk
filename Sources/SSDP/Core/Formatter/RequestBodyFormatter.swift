@@ -40,8 +40,8 @@ class RequestBodyFormatter {
     
     fileprivate func from(nt: Value.NT) -> String {
         switch nt {
-        case .urn(let domain, let type, let version):
-            return "urn:\(domain):device:\(type):\(version)"
+        case .app(let domain, let name):
+            return "\(domain):\(name)"
         case .ssdp(let ssdp):
             return "ssdp:\(ssdp.rawValue)"
         }
