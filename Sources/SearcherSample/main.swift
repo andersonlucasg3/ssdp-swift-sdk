@@ -3,14 +3,15 @@ import Foundation
 
 let search = SearchRequest.RTU.search(nt: .ssdp(ssdp: .all)).build()
 
-do {
-    try search.request()
-} catch {
-    print("Deu merda: \(error)")
+func request() {
+    do { try search.request() }
+    catch { print("Deu merda: \(error)") }
+    
+    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+        request()
+    }
 }
 
-DispatchQueue.main.asyncAfter(deadline: .now() + 18) {
-    exit(0)
-}
+request()
 
 dispatchMain()

@@ -28,6 +28,7 @@ open class Request {
         guard let address = Socket.createAddress(for: Host.ip.rawValue, on: port) else { throw RequestError.invalidIP(value: Host.ip.rawValue) }
         
         Log.debug(message: "Request on address: \(Host.ip.rawValue):\(Host.port.rawValue)")
+        Log.debug(message: "Request count: \(sendCount)")
         
         let body = try requestBody()
         
@@ -36,10 +37,18 @@ open class Request {
             
             self.startTime = Date.init().timeIntervalSince1970
             
-            guard self.shouldHandleResponses else { return }
+            guard self.shouldHandleResponses else {
+                self.close()
+                return
+            }
             
             self.readReponse()
         }
+    }
+    
+    fileprivate func close() {
+        socket?.close()
+        socket = nil
     }
     
     fileprivate func multipleShots(body: Data, to address: Socket.Address, completion: @escaping os_block_t) {
@@ -91,8 +100,7 @@ open class Request {
             
             Log.debug(message: "Finished trying do read data...")
             
-            self.socket?.close()
-            self.socket = nil
+            self.close()
         }
     }
     

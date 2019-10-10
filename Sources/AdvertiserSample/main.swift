@@ -8,8 +8,15 @@ let alive = AliveRequest.RTU.alive(location: getAddress(for: .wifi) ?? getAddres
                                    uuid: uuid,
                                    duration: 10).build()
 
-do {
-    try alive.request()
-} catch {
-    print("Deu merda: \(error)")
+func request() {
+    do { try alive.request() }
+    catch { print("Deu merda: \(error)") }
+    
+    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+        request()
+    }
 }
+
+request()
+
+dispatchMain()
