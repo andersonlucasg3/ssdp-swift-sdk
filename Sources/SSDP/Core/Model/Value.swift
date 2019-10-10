@@ -17,8 +17,10 @@ public enum Value {
     case st(value: ST)
         
     public enum NT {
+        case upnp
         case urn(domain: String, type: String, version: UInt16)
         case ssdp(ssdp: SSDP)
+        case uuid(uuid: String)
     }
     
     public enum USN {

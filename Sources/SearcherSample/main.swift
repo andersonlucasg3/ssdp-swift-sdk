@@ -1,7 +1,7 @@
 import SSDP
 import Foundation
 
-let search = SearchRequest.RTU.search(nt: .ssdp(ssdp: .all)).build()
+let search = SearchSender.RTU.search(nt: .ssdp(ssdp: .all)).build()
 
 func request() {
     do { try search.request() }

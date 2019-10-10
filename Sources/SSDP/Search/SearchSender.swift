@@ -1,15 +1,13 @@
 import struct Foundation.Data
 
-public class SearchRequest: Request {
+public class SearchSender: Sender {
     fileprivate var nt: Value.NT!
     fileprivate var ssdp: Value.SSDP!
-    
-    public override var shouldHandleResponses: Bool { return true }
     
     internal init() { super.init(sendCount: 3) }
     
     public override func requestBody() throws -> Data {
-        let formatter = RequestBodyFormatter.init()
+        let formatter = SenderBody.init()
         
         formatter.set(method: .mSearch)
         formatter.add(header: .host, with: .host(value: .address))
@@ -18,28 +16,24 @@ public class SearchRequest: Request {
         if let ssdp = ssdp { formatter.add(header: .st, with: .st(value: .ssdp(ssdp: ssdp))) }
         else { formatter.add(header: .st, with: .st(value: .nt(nt: nt))) }
         
-        let formatted = formatter.format()
+        let formatted = formatter.build()
         
         Log.debug(message: "Sending request \n\(formatted)")
         
         return formatted.data(using: .utf8)!
     }
-    
-    public override func received(response: String, from host: String) throws {
-        // TODO: implement
-    }
 }
 
-public extension SearchRequest {
+public extension SearchSender {
     class Builder {
-        private var request: SearchRequest
+        private var request: SearchSender
         
         public init() { request = .init() }
         
         public func set(nt: Value.NT) -> Builder { request.nt = nt; return self }
         public func set(ssdp: Value.SSDP) -> Builder { request.ssdp = ssdp; return self }
         
-        public func build() -> SearchRequest {
+        public func build() -> SearchSender {
             return request
         }
     }
@@ -47,7 +41,7 @@ public extension SearchRequest {
     enum RTU {
         case search(nt: Value.NT)
         
-        public func build() -> SearchRequest {
+        public func build() -> SearchSender {
             switch self {
             case .search(let nt):
                 return Builder()

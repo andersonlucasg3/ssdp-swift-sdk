@@ -1,4 +1,4 @@
-class RequestBodyFormatter {
+class SenderBody {
     private var method: Method!
     private var headers: [(key: Header, value: Value)] = []
     
@@ -14,7 +14,7 @@ class RequestBodyFormatter {
         }
     }
     
-    public func format() -> String {
+    public func build() -> String {
         var output = "\(method.rawValue)\r\n"
         for kv in headers {
             output.append("\(kv.key.rawValue): \(value(kv.value))\r\n")
@@ -40,10 +40,14 @@ class RequestBodyFormatter {
     
     fileprivate func from(nt: Value.NT) -> String {
         switch nt {
+        case .upnp:
+            return "upnp:rootdevice"
         case .urn(let domain, let type, let version):
             return "urn:\(domain):device:\(type):\(version)"
         case .ssdp(let ssdp):
             return "ssdp:\(ssdp.rawValue)"
+        case .uuid(let uuid):
+            return "uuid:\(uuid)"
         }
     }
     

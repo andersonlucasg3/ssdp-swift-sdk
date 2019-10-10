@@ -1,41 +1,43 @@
 import struct Foundation.Data
+import typealias Dispatch.os_block_t
 
-public class AliveRequest: Request {
+public class AliveSender: Sender {
     fileprivate var nt: Value.NT!
+    fileprivate var usn: Value.USN!
     fileprivate var uuid: String!
     fileprivate var location: String!
     fileprivate var duration: UInt16!
     fileprivate var server: Value.Server!
         
-    internal init() { super.init(sendCount: 3, listenOn: Int(Host.port.rawValue)!) }
+    internal init() { super.init(sendCount: 3) }
+    
+    public override func send(completion: @escaping os_block_t = {}) throws {
+        try super.send()
+    }
     
     override open func requestBody() throws -> Data {
-        let formatter = RequestBodyFormatter.init()
+        let body = SenderBody.init()
                 
-        formatter.set(method: .notify)
-        formatter.add(header: .host, with: .host(value: .address))
-        formatter.add(header: .cacheControl, with: .cacheControl(value: .maxAge(seconds: duration)))
-        formatter.add(header: .location, with: .location(value: location))
-        formatter.add(header: .nt, with: .nt(value: nt))
-        formatter.add(header: .nts, with: .nts(value: .sspd(value: .alive)))
-        formatter.add(header: .server, with: .server(value: server))
-        formatter.add(header: .usn, with: .usn(value: .nt(uuid: uuid, nt: nt)))
+        body.set(method: .notify)
+        body.add(header: .host, with: .host(value: .address))
+        body.add(header: .cacheControl, with: .cacheControl(value: .maxAge(seconds: duration)))
+        body.add(header: .location, with: .location(value: location))
+        body.add(header: .nt, with: .nt(value: nt))
+        body.add(header: .nts, with: .nts(value: .sspd(value: .alive)))
+        body.add(header: .server, with: .server(value: server))
+        body.add(header: .usn, with: .usn(value: usn))
         
-        let formatted = formatter.format()
+        let formatted = body.build()
         
         Log.debug(message: "Sending request \n\(formatted)")
         
         return formatted.data(using: .utf8)!
     }
-    
-    public override func received(response: String, from host: String) throws {
-        
-    }
 }
 
-public extension AliveRequest {
+public extension AliveSender {
     class Builder {
-        fileprivate var request: AliveRequest
+        fileprivate var request: AliveSender
         
         public init() {
             request = .init()
@@ -46,24 +48,26 @@ public extension AliveRequest {
         public func set(uuid: String) -> Builder { request.uuid = uuid; return self }
         public func set(duration: UInt16) -> Builder { request.duration = duration; return self }
         public func set(server: Value.Server) -> Builder { request.server = server; return self }
+        public func set(usn: Value.USN) -> Builder { request.usn = usn; return self }
         
-        public func build() -> AliveRequest {
+        public func build() -> AliveSender {
             return request
         }
     }
     
     enum RTU {
-        case alive(location: String, nt: Value.NT, uuid: String, duration: UInt16, server: Value.Server = .this)
+        case alive(location: String, nt: Value.NT, usn: Value.USN, uuid: String, duration: UInt16, server: Value.Server = .this)
         
-        public func build() -> AliveRequest {
+        public func build() -> AliveSender {
             switch self {
-            case .alive(let location, let nt, let uuid, let duration, let server):
+            case .alive(let location, let nt, let usn, let uuid, let duration, let server):
                 return Builder()
                     .set(nt: nt)
                     .set(location: location)
                     .set(uuid: uuid)
                     .set(duration: duration)
                     .set(server: server)
+                    .set(usn: usn)
                     .build()
             }
         }

@@ -3,7 +3,7 @@ import Foundation
 
 class DeviceController {
     fileprivate let myUuid = UUID.init().uuidString
-    fileprivate let urn = Value.NT.app(domain: "com-globo-tvos-receiver", name: "globo-play")
+    fileprivate let urn = Value.NT.urn(domain: "receiver-tvos-globo-com", type: "appletv", version: 1)
     
     fileprivate var byebyeRequest: ByebyeRequest?
     fileprivate var aliveRequest: AliveRequest?
@@ -12,10 +12,10 @@ class DeviceController {
     init() { }
     
     func notify() {
-//        let byebye = ByebyeRequest.RTU.self
+//        let byebye = ByebyeSender.RTU.self
 //        byebyeRequest = byebye.byebye(nt: urn, uuid: myUuid).build()
 //        do {
-//            try byebyeRequest?.request()
+//            try byebyeRequest?.send()
 //        } catch {
 //            print("Deu cancel merda: \(error)")
 //        }

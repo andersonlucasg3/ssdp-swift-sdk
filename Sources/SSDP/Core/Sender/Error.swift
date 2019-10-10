@@ -1,9 +1,9 @@
 import struct Foundation.Data
 
-enum RequestError: Error {
+enum Error: Swift.Error {
     case missing(header: Header)
     case notImplemented(name: String)
-    case invalidPort(value: String)
+    case invalidPort(value: Int)
     case invalidIP(value: String)
     case invalidRepsonse(data: Data)
     case alreadyRequesting

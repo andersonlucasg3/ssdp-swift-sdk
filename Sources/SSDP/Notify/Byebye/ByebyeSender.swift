@@ -1,15 +1,13 @@
 import struct Foundation.Data
 
-public class ByebyeRequest: Request {
+public class ByebyeSender: Sender {
     fileprivate var nt: Value.NT!
     fileprivate var uuid: String!
-    
-    public override var shouldHandleResponses: Bool { return false }
-    
+        
     internal init() { super.init(sendCount: 1) }
     
     public override func requestBody() throws -> Data {
-        let formatter = RequestBodyFormatter.init()
+        let formatter = SenderBody.init()
         
         formatter.set(method: .notify)
         formatter.add(header: .host, with: .host(value: .address))
@@ -17,7 +15,7 @@ public class ByebyeRequest: Request {
         formatter.add(header: .nts, with: .nts(value: .sspd(value: .byebye)))
         formatter.add(header: .usn, with: .usn(value: .uuid(uuid: uuid)))
         
-        let formatted = formatter.format()
+        let formatted = formatter.build()
         
         Log.debug(message: "Sending request \n\(formatted)")
         
@@ -25,9 +23,9 @@ public class ByebyeRequest: Request {
     }
 }
 
-public extension ByebyeRequest {
+public extension ByebyeSender {
     class Builder {
-        private var request: ByebyeRequest
+        private var request: ByebyeSender
         
         public init() {
             request = .init()
@@ -36,7 +34,7 @@ public extension ByebyeRequest {
         public func set(nt: Value.NT) -> Builder { request.nt = nt; return self }
         public func set(uuid: String) -> Builder { request.uuid = uuid; return self }
         
-        public func build() -> ByebyeRequest {
+        public func build() -> ByebyeSender {
             return request
         }
     }
@@ -44,7 +42,7 @@ public extension ByebyeRequest {
     enum RTU {
         case byebye(nt: Value.NT, uuid: String)
         
-        public func build() -> ByebyeRequest {
+        public func build() -> ByebyeSender {
             switch self {
             case .byebye(let nt, let uuid):
                 return Builder()
