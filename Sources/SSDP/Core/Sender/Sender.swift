@@ -8,7 +8,7 @@ open class Sender {
     fileprivate var socket: Socket?
     fileprivate var sendCount: Int
     
-    internal init(sendCount: Int) {
+    internal init(sendCount: Int = 1) {
         self.sendCount = sendCount
     }
     
@@ -48,11 +48,11 @@ open class Sender {
         sendBlock()
         
         let sendCount = self.sendCount
-        (1..<sendCount).forEach { (index) in
+        (1...sendCount).forEach { (index) in
             DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval(index)) {
                 sendBlock()
                 
-                if index == sendCount - 1 {
+                if index == sendCount {
                     DispatchQueue.main.async(execute: completion)
                 }
             }

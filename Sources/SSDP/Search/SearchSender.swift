@@ -4,7 +4,7 @@ public class SearchSender: Sender {
     fileprivate var nt: Value.NT!
     fileprivate var ssdp: Value.SSDP!
     
-    internal init() { super.init(sendCount: 3) }
+    internal init() { super.init() }
     
     public override func requestBody() throws -> Data {
         let formatter = SenderBody.init()

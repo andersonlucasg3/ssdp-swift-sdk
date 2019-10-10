@@ -1,4 +1,4 @@
-public class AliveListener: Listener {
+public class SearchListener: Listener {
     public func listen() throws {
         try super.listen(on: Host.port)
     }
