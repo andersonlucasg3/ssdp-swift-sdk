@@ -1,62 +1,53 @@
 import SSDP
 import Foundation
 
-class DeviceController {
+class DeviceController: ListenerDelegate {
+    fileprivate static let ip = getAddress(for: .wifi) ?? getAddress(for: .cellular) ?? "0.0.0.0:0"
+    
     fileprivate let myUuid = UUID.init().uuidString
     fileprivate let urn = Value.NT.urn(domain: "receiver-tvos-globo-com", type: "appletv", version: 1)
+    fileprivate let location = "ws://\(ip)/receiver"
     
-    fileprivate var byebyeRequest: ByebyeSender?
     fileprivate var aliveSender: AliveSender?
-    fileprivate var aliveListener: AliveListener?
     fileprivate var searchRequest: SearchSender?
-    fileprivate var searchListener: SearchListener?
     
     init() { }
     
     func notify() {
-//        let byebye = ByebyeSender.RTU.self
-//        byebyeRequest = byebye.byebye(nt: urn, uuid: myUuid).build()
-//        do {
-//            try byebyeRequest?.send()
-//        } catch {
-//            print("Deu cancel merda: \(error)")
-//        }
+        aliveSender?.stop()
         
         let alive = AliveSender.RTU.self
-        let loc = getAddress(for: .wifi) ?? getAddress(for: .cellular) ?? "0.0.0.0:0"
-        aliveSender = alive.alive(location: "ws://\(loc):6005",
+        
+        aliveSender = alive.alive(location: location,
                                    nt: urn,
                                    usn: .nt(uuid: myUuid, nt: urn),
                                    uuid: myUuid,
                                    duration: 10,
                                    server: .this).build()
         
-        aliveListener = try! .init()
-        try! aliveListener?.listen()
+        aliveSender?.listenerDelegate = self
+        aliveSender?.listen(addr: .init(host: Host.ip, port: Host.port))
         
-        do {
-            try aliveSender?.send()
-        } catch {
-            print("Deu notify merda: \(error)")
-        }
+        aliveSender?.send()
     }
     
     func search() {
+        searchRequest?.stop()
+        
         searchRequest = SearchSender.Builder.init()
             .set(nt: .ssdp(ssdp: .all))
             .build()
         
-        searchListener = try! .init()
-        try! searchListener?.listen()
+        searchRequest?.listenerDelegate = self
+        searchRequest?.listen(addr: .init(host: Host.ip, port: Host.port))
         
-        doSearch()
+        searchRequest?.send()
     }
     
     fileprivate func doSearch() {
         guard searchRequest != nil else { return }
         
-        do { try searchRequest?.send() }
-        catch { print("Deu search merda: \(error)") }
+        
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 12) { [weak self] in
             self?.doSearch()
@@ -64,12 +55,19 @@ class DeviceController {
     }
     
     func stopSearch() {
-        searchRequest = nil
-        searchListener?.stop()
-        searchListener = nil
+        
     }
     
-    // MARK: - NotifyRequestDelegate
+    // MARK: - ListenerDelegate
     
-    
+    func didReceiveMessage(body: MessageBody, from host: String) {
+        switch body.method! {
+        case .notify:
+            print("Received notify from: \(host)")
+        case .mSearch:
+            
+        case .httpOk:
+            print("Received http ok from: \(host)")
+        }
+    }
 }

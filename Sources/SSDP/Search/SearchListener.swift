@@ -7,13 +7,10 @@ public class SearchListener: Listener {
     
     override func received(response: Data, from host: String) throws {
         guard
-            let body = MessageBody.init(from: response)
+            let body = MessageBody.init(from: response),
+            body.method == .httpOk || body.method == .notify
         else { return }
         
-        switch body.method {
-        case .httpOk, .notify:
-            delegate?.didReceiveMessage(body: body, from: host)
-        default: break
-        }
+        delegate?.didReceiveMessage(body: body, from: host)
     }
 }

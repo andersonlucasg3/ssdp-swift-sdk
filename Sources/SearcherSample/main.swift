@@ -9,7 +9,7 @@ class Del: ListenerDelegate {
         if body.method == .notify {
             guard let nt = body.headers[.nt] else { return }
             if nt == .nt(value: urn) {
-                print("Received right response from \(host)")
+                print("Received filtered notify from \(host)")
             }
         }
     }
