@@ -15,19 +15,19 @@ class DeviceController: ListenerDelegate {
     init() { }
     
     func notify() {
-        aliveSender?.stop()
-        
-        let alive = AliveSender.RTU.self
-        
-        aliveSender = alive.alive(location: location,
-                                   nt: urn,
-                                   usn: .nt(uuid: myUuid, nt: urn),
-                                   uuid: myUuid,
-                                   duration: 10,
-                                   server: .this).build()
-        
-        aliveSender?.listenerDelegate = self
-        aliveSender?.listen(addr: .init(host: Host.ip, port: Host.port))
+        if aliveSender == nil {
+            let alive = AliveSender.RTU.self
+            
+            aliveSender = alive.alive(location: location,
+                                       nt: urn,
+                                       usn: .nt(uuid: myUuid, nt: urn),
+                                       uuid: myUuid,
+                                       duration: 10,
+                                       server: .this).build()
+            
+            aliveSender?.listenerDelegate = self
+            aliveSender?.listen(addr: .init(host: Host.ip, port: Host.port))
+        }
         
         aliveSender?.send()
     }
@@ -66,7 +66,7 @@ class DeviceController: ListenerDelegate {
                                          location: location,
                                          st: .nt(nt: urn),
                                          usn: .nt(uuid: myUuid, nt: urn)).build()
-            responder.send()
+            responder.send(host: host, port: Host.port)
         case .httpOk:
             print("Received http ok from: \(host)")
         }
