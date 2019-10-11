@@ -19,7 +19,7 @@ Simple implementation of advertising and device discovery over SSDP.
   s.ios.deployment_target = '10.0'
   s.tvos.deployment_target = '11.0'
 
-  s.source_files     = 'Sources/SSDP/**/*.{swift}',
+  s.source_files     = 'Sources/SSDP/**/*.{swift,h}',
                        'Sources/Socket/**/*.{m,h}'
 
   s.dependency       'BlueSocket'
