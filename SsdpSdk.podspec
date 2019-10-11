@@ -13,11 +13,14 @@ Simple implementation of advertising and device discovery over SSDP.
   s.author           = { 'Anderson Lucas C. Ramos' => 'andersonlucasg3@hotmail.com' }
   s.source           = { :git => 'https://github.com/andersonlucasg3/ssdp-swift-sdk.git', :tag => s.version.to_s }
 
+  s.swift_version    = '5'
+  s.requires_arc     = true
+
   s.ios.deployment_target = '10.0'
   s.tvos.deployment_target = '11.0'
 
-  s.source_files = 'Sources/SSDP/**/*.{swift}',
-                    'Sources/Socket/**/*.{m,h}'
+  s.source_files     = 'Sources/SSDP/**/*.{swift}',
+                       'Sources/Socket/**/*.{m,h}'
 
-  s.dependency 'BlueSocket'
+  s.dependency       'BlueSocket'
 end
