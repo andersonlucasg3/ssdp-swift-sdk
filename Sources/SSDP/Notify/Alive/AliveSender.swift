@@ -8,10 +8,6 @@ public class AliveSender: Sender<AliveListener> {
     fileprivate var location: String!
     fileprivate var duration: Int = 120
     fileprivate var server: Value.Server!
-        
-    internal init() {
-        super.init(sendCount: 5)
-    }
     
     public func send() {
         super.send(addr: .init(host: Host.ip, port: Host.port), body: requestBody())

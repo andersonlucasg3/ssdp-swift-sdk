@@ -26,7 +26,7 @@ class DeviceController: ListenerDelegate {
                                        server: .this).build()
             
             aliveSender?.listenerDelegate = self
-            aliveSender?.listen(addr: .init(host: Host.ip, port: Host.port))
+            try? aliveSender?.listen(addr: .init(host: Host.ip, port: Host.port))
         }
         
         aliveSender?.send()
@@ -39,11 +39,11 @@ class DeviceController: ListenerDelegate {
                 .build()
             
             searchRequest?.listenerDelegate = self
-            searchRequest?.listen()
+            try? searchRequest?.listen()
             
             searchListener = .init()
             searchListener?.delegate = self
-            searchListener?.listen(addr: .init(host: DeviceController.ip, port: Host.port))
+            try? searchListener?.listen(addr: .init(host: DeviceController.ip, port: Host.port))
         }
         
         searchRequest?.send()

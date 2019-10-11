@@ -5,10 +5,6 @@ public class SearchSender: Sender<SearchListener> {
     fileprivate var ssdp: Value.SSDP!
     fileprivate var delay: Int = 120
     
-    internal init() {
-        super.init(sendCount: 5)
-    }
-    
     public func send() {
         send(addr: .init(host: Host.ip, port: Host.port), body: requestBody())
     }

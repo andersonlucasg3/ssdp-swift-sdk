@@ -4,10 +4,6 @@ public class ByebyeSender: Sender<Listener> {
     fileprivate var nt: Value.NT!
     fileprivate var uuid: String!
         
-    internal init() {
-        super.init(sendCount: 5)
-    }
-    
     public func send() {
         super.send(addr: .init(host: Host.ip, port: Host.port), body: requestBody())
     }
