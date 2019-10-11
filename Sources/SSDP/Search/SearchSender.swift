@@ -9,6 +9,14 @@ public class SearchSender: Sender<SearchListener> {
         super.init()
     }
     
+    public func send() {
+        send(host: Host.ip, port: Host.port)
+    }
+    
+    public func listen() {
+        listen(addr: .init(host: Host.ip, port: Host.port))
+    }
+    
     public override func requestBody() -> MessageBody {
         let body = MessageBody.init()
         

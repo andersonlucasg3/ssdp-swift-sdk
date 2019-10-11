@@ -26,7 +26,7 @@
 
 @optional
 
-- (void)socket:(SSDPSocketListener *)aSocket didReceiveData:(NSData *)aData fromAddress:(NSString *)anAddress;
+- (void)socket:(SSDPSocketListener *)aSocket didReceiveData:(NSData *)aData fromAddress:(NSString *)anAddress andPort:(NSUInteger)port;
 - (void)socket:(SSDPSocketListener *)aSocket didEncounterError:(NSError *)anError;
 
 @end

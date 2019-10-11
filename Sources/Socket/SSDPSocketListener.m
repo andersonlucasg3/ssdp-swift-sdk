@@ -82,13 +82,13 @@
         });
 }
 
-- (void)didReceiveData:(NSData *)aData fromAddress:(NSString *)anAddress
+- (void)didReceiveData:(NSData *)aData fromAddress:(NSString *)anAddress andPort:(NSUInteger)port
 {
     dispatch_async(self.delegateQueue,
         ^{
-            if ([self.delegate respondsToSelector:@selector(socket:didReceiveData:fromAddress:)])
+            if ([self.delegate respondsToSelector:@selector(socket:didReceiveData:fromAddress:andPort:)])
             {
-                [self.delegate socket:self didReceiveData:aData fromAddress:anAddress];
+                [self.delegate socket:self didReceiveData:aData fromAddress:anAddress andPort:port];
             }
     });
 }
@@ -156,11 +156,10 @@
             memset(theCAddrBuffer, 0, SOCK_MAXADDRLEN);
             inet_ntop(theIncomingAddr.sin_family, &theIncomingAddr.sin_addr, theCAddrBuffer, SOCK_MAXADDRLEN);
 
-            NSString *thePath = [[NSString alloc] initWithBytes:theCAddrBuffer
-                length:strlen(theCAddrBuffer) encoding:NSUTF8StringEncoding];
+            NSString *thePath = [[NSString alloc] initWithBytes:theCAddrBuffer length:strlen(theCAddrBuffer) encoding:NSUTF8StringEncoding];
             NSData * theReceivedData = [NSData dataWithBytes:theBuffer length:theDataSize];
             
-            [self didReceiveData:theReceivedData fromAddress:thePath];
+            [self didReceiveData:theReceivedData fromAddress:thePath andPort:theIncomingAddr.sin_port];
             
         });
     

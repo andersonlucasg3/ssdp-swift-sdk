@@ -13,6 +13,14 @@ public class AliveSender: Sender<AliveListener> {
         super.init(sendCount: 3)
     }
     
+    public func send() {
+        super.send()
+    }
+    
+    public override func listen(addr: Address) {
+        super.listen(addr: addr)
+    }
+    
     override open func requestBody() -> MessageBody {
         let body = MessageBody.init()
                 

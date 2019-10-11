@@ -3,7 +3,7 @@ import Foundation
 
 let address = getAddress(for: .wifi) ?? getAddress(for: .ethernet) ?? "0.0.0.0:0"
 let uuid = UUID.init().uuidString
-let urn: Value.NT = .urn(domain: "receiver-tvos-globo-com", type: "appletv", version: 1)
+let urn: Value.NT = .urn(domain: "com-globo-play-receiver", type: "appletv", version: 1)
 let location = "ws://\(address)/receiver"
 
 let sender = AliveSender.RTU.alive(location: location,
@@ -13,15 +13,15 @@ let sender = AliveSender.RTU.alive(location: location,
                                 duration: 120).build()
 
 class Del: ListenerDelegate {
-    func didReceiveMessage(body: MessageBody, from host: String) {
+    func didReceiveMessage(body: MessageBody, from addr: Address) {
         if body.method == .mSearch {
-            print("Received m search from host: \(host)")
+            print("Received m search from host: \(addr.host), and port: \(addr.port)")
             let rtu = SearchResponseSender.RTU.self
             let sender = rtu.response(duration: 120,
                                       location: location,
                                       st: .nt(nt: urn),
                                       usn: .nt(uuid: uuid, nt: urn)).build()
-            sender.send(host: host, port: Host.port)
+            sender.send(addr: addr)
         }
     }
 }
@@ -34,7 +34,7 @@ sender.listen(addr: .init(host: Host.ip, port: Host.port))
 func request() {
     sender.send()
     
-    DispatchQueue.main.asyncAfter(deadline: .now() + 120) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
         request()
     }
 }

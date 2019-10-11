@@ -10,6 +10,10 @@ public class SearchResponseSender: Sender<Listener> {
         super.init()
     }
     
+    public func send(addr: Address) {
+        send(host: addr.host, port: addr.port)
+    }
+    
     public override func requestBody() -> MessageBody {
         let body = MessageBody.init()
         

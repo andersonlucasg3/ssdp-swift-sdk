@@ -5,7 +5,7 @@ import struct Foundation.TimeInterval
 import Socket
 
 public protocol ListenerDelegate: class {
-    func didReceiveMessage(body: MessageBody, from host: String)
+    func didReceiveMessage(body: MessageBody, from addr: Address)
 }
 
 open class Listener: NSObject {
@@ -17,17 +17,17 @@ open class Listener: NSObject {
     
     public required override init() { super.init() }
     
-    public func listen(on port: UInt16, and interface: String = "0.0.0.0") {
+    func listen(addr: Address) {
         guard socket == nil else { return }
                 
-        createSocket(port, interface)
+        createSocket(addr.port, addr.host)
         
-        Log.debug(message: "\(#function) port: \(port), and ip: \(String.init(describing: interface))")
+        Log.debug(message: "\(#function) port: \(addr.port), and ip: \(addr.host)")
         
         socket?.open()
     }
     
-    func received(response: Data, from host: String) throws {
+    func received(response: Data, from addr: Address) throws {
         throw Error.notImplemented(name: #function)
     }
     
@@ -42,7 +42,7 @@ open class Listener: NSObject {
             
             self.sliceBuffer(for: bufferDelimiterRange)
             
-            try! received(response: packageData, from: addr.host)
+            try! received(response: packageData, from: addr)
         }
     }
     

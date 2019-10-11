@@ -19,7 +19,7 @@ open class Sender<ListenerType> where ListenerType: Listener {
         self.sendCount = sendCount
     }
     
-    public func send(host: String = Host.ip, port: UInt16 = Host.port) {
+    func send(host: String = Host.ip, port: UInt16 = Host.port) {
         let addr = Address.init(host: host, port: port)
         
         Log.debug(message: "Sender on address: \(addr.host):\(addr.port)")
@@ -35,8 +35,8 @@ open class Sender<ListenerType> where ListenerType: Listener {
         multipleShots(body: data, to: addr)
     }
     
-    public func listen(addr: Address) {
-        listener.listen(on: addr.port, and: addr.host)
+    func listen(addr: Address) {
+        listener.listen(addr: addr)
     }
     
     public func stop() {

@@ -60,7 +60,7 @@ public class MessageBody {
         case .mx(let value): return from(mx: value)
         case .st(let value): return from(st: value)
         case .userAgent(let value): return value.rawValue
-        case .date(let value): return "\(value)"
+        case .date(let value): return "\"\(value)\""
         case .ext: return ""
         }
     }
@@ -165,7 +165,7 @@ public class MessageBody {
         case .st: return .st(value: st(value: value))
         case .userAgent: if let server = server(value: value) { return .userAgent(value: server) }
         case .usn: return .usn(value: usn(value: value))
-        case .date: return .date(value: TimeInterval(value)!)
+        case .date: return .date(value: TimeInterval(value.replacingOccurrences(of: "\"", with: ""))!)
         case .ext: return .ext
         }
         return nil
