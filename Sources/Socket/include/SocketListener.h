@@ -20,18 +20,18 @@
 
 #import <Foundation/Foundation.h>
 
-@class SSDPSocketListener;
+@class SocketListener;
 
 @protocol SocketListenerDelegate <NSObject>
 
 @optional
 
-- (void)socket:(SSDPSocketListener *)aSocket didReceiveData:(NSData *)aData fromAddress:(NSString *)anAddress andPort:(NSUInteger)port;
-- (void)socket:(SSDPSocketListener *)aSocket didEncounterError:(NSError *)anError;
+- (void)socket:(SocketListener *)aSocket didReceiveData:(NSData *)aData fromAddress:(NSString *)anAddress andPort:(NSUInteger)port;
+- (void)socket:(SocketListener *)aSocket didEncounterError:(NSError *)anError;
 
 @end
 
-@interface SSDPSocketListener : NSObject
+@interface SocketListener : NSObject
 
 @property (nonatomic, assign) id<SocketListenerDelegate> delegate;
 @property (nonatomic, strong) NSString *address;

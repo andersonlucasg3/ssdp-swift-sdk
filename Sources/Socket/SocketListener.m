@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import "SSDPSocketListener.h"
+#import "SocketListener.h"
 
 #import <sys/socket.h>
 #import <sys/types.h>
@@ -26,7 +26,7 @@
 #import <arpa/inet.h>
 #import "ConnectError.h"
 
-@implementation SSDPSocketListener
+@implementation SocketListener
 {
     BOOL _isListening;
     dispatch_source_t _dispatchSource;

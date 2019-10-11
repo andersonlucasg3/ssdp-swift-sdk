@@ -9,7 +9,7 @@ public protocol ListenerDelegate: class {
 }
 
 open class Listener: NSObject {
-    fileprivate(set) internal var socket: SSDPSocketListener?
+    fileprivate(set) internal var socket: SocketListener?
     fileprivate var buffer = Data.init()
     fileprivate let delimiterData = "\r\n\r\n".data(using: .utf8)!
         
@@ -47,7 +47,7 @@ open class Listener: NSObject {
     }
     
     fileprivate func createSocket(_ port: UInt16, _ host: String) {
-        socket = SSDPSocketListener.init(address: host, andPort: Int(port))
+        socket = SocketListener.init(address: host, andPort: Int(port))
         socket?.delegate = self
     }
     
@@ -70,12 +70,12 @@ open class Listener: NSObject {
 }
 
 extension Listener: SocketListenerDelegate {
-    public func socket(_ aSocket: SSDPSocketListener!, didReceive aData: Data!, fromAddress anAddress: String!) {
+    public func socket(_ aSocket: SocketListener!, didReceive aData: Data!, fromAddress anAddress: String!) {
         buffer.append(aData)
         read(data: buffer, from: .init(host: anAddress, port: 0))
     }
     
-    public func socket(_ aSocket: SSDPSocketListener!, didEncounterError anError: Swift.Error!) {
+    public func socket(_ aSocket: SocketListener!, didEncounterError anError: Swift.Error!) {
         // TODO: check for errors
     }
 }
