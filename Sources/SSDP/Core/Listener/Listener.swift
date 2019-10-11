@@ -76,6 +76,7 @@ extension Listener: SocketListenerDelegate {
     }
     
     public func socket(_ aSocket: SocketListener!, didEncounterError anError: Swift.Error!) {
-        // TODO: check for errors
+        guard let error = anError else { return }
+        Log.debug(message: "Socket error: \(error)")
     }
 }

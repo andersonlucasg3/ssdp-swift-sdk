@@ -5,10 +5,14 @@ public class ByebyeSender: Sender<Listener> {
     fileprivate var uuid: String!
         
     internal init() {
-        super.init()
+        super.init(sendCount: 5)
     }
     
-    public override func requestBody() -> MessageBody {
+    public func send() {
+        super.send(addr: .init(host: Host.ip, port: Host.port), body: requestBody())
+    }
+    
+    private func requestBody() -> MessageBody {
         let body = MessageBody.init()
         
         body.set(method: .notify)

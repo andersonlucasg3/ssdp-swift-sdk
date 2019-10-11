@@ -43,7 +43,7 @@ class DeviceController: ListenerDelegate {
             
             searchListener = .init()
             searchListener?.delegate = self
-            searchListener?.listen(addr: .init(host: Host.ip, port: 0))
+            searchListener?.listen(addr: .init(host: DeviceController.ip, port: 0))
         }
         
         searchRequest?.send()
@@ -54,6 +54,10 @@ class DeviceController: ListenerDelegate {
         searchListener?.stop()
         
         aliveSender?.stop()
+        
+        searchRequest = nil
+        searchListener = nil
+        aliveSender = nil
     }
     
     // MARK: - ListenerDelegate
@@ -62,15 +66,21 @@ class DeviceController: ListenerDelegate {
         switch body.method! {
         case .notify:
             print("Received notify from: \(addr)")
+            print("Conetent: \n\(body.headers)")
         case .mSearch:
+            guard aliveSender != nil else { return }
+            
+            print("Received msearch from: \(addr)")
+            print("Conetent: \n\(body.headers)")
             let rtu = SearchResponseSender.RTU.self
             let responder = rtu.response(duration: 120,
                                          location: location,
                                          st: .nt(nt: urn),
                                          usn: .nt(uuid: myUuid, nt: urn)).build()
-            responder.send(addr: addr)
+            responder.send(addr: .init(host: addr.host, port: Host.port))
         case .httpOk:
             print("Received http ok from: \(addr)")
+            print("Conetent: \n\(body.headers)")
         }
     }
 }

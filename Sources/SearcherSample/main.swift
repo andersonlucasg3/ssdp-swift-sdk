@@ -8,19 +8,20 @@ let listener = SearchListener.init()
 
 class Del: ListenerDelegate {
     func didReceiveMessage(body: MessageBody, from addr: Address) {
-        print("Did receive \n\(body.build())\nfrom \(addr)")
+//        print("Did receive \n\(body.build())\nfrom \(addr)")
         
         if body.method == .notify {
             guard let nt = body.headers[.nt] else { return }
             if nt == .nt(value: urn) {
                 print("Received filtered notify from \(addr)")
+                print("Content: \(nt)")
             }
         }
         if body.method == .httpOk {
-            print("Received filtered httpok from \(addr)")
             guard let st = body.headers[.st] else { return }
             if st == .st(value: .nt(nt: urn)) {
-                
+                print("Received filtered httpok from \(addr)")
+                print("Content: \(st)")
             }
         }
     }
@@ -30,10 +31,13 @@ let del  = Del.init()
 searcher.listenerDelegate = del
 searcher.listen()
 
+listener.delegate = del
+listener.listen(addr: .init(host: Host.ip, port: 0))
+
 func request() {
     searcher.send()
 
-    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
         request()
     }
 }

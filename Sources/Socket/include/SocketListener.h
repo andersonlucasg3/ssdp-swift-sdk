@@ -40,6 +40,7 @@
 @property (nonatomic, readwrite) dispatch_queue_t workQueue;
 @property (nonatomic, readwrite) dispatch_queue_t delegateQueue;
 @property (nonatomic, readwrite, getter = isListenToAnyMessages) BOOL listenToSpecifiedAddressOnly;
+@property (nonatomic, readwrite, getter = isOpen) BOOL isOpen;
 
 - (instancetype)initWithAddress:(NSString *)anAddress andPort:(NSInteger)aPort;
 - (void)sendData:(NSData *)aData toAddress:(NSString *)anAddress andPort:(NSUInteger)aPort;

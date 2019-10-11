@@ -14,27 +14,28 @@ let sender = AliveSender.RTU.alive(location: location,
 
 class Del: ListenerDelegate {
     func didReceiveMessage(body: MessageBody, from addr: Address) {
+        print("Received \(body.method!) ==== from \(addr)")
         if body.method == .mSearch {
             print("Received m search from host: \(addr.host), and port: \(addr.port)")
             let rtu = SearchResponseSender.RTU.self
-            let sender = rtu.response(duration: 120,
+            let respSender = rtu.response(sender: sender,
+                                      duration: 120,
                                       location: location,
                                       st: .nt(nt: urn),
                                       usn: .nt(uuid: uuid, nt: urn)).build()
-            sender.send(addr: addr)
+            respSender.send(addr: .init(host: addr.host, port: Host.port))
         }
     }
 }
 
 let del = Del.init()
 sender.listenerDelegate = del
-
 sender.listen(addr: .init(host: Host.ip, port: Host.port))
 
 func request() {
     sender.send()
     
-    DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 20) {
         request()
     }
 }

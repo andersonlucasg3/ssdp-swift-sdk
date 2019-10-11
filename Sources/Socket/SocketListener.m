@@ -164,6 +164,8 @@
         });
     
     dispatch_resume(_dispatchSource);
+    
+    _isOpen = YES;
 }
 
 
@@ -196,6 +198,8 @@
         dispatch_source_cancel(_dispatchSource);
     
     _dispatchSource = nil;
+    
+    _isOpen = NO;
 }
 
 @end

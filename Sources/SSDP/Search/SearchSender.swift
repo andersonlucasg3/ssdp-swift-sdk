@@ -6,18 +6,18 @@ public class SearchSender: Sender<SearchListener> {
     fileprivate var delay: Int = 120
     
     internal init() {
-        super.init()
+        super.init(sendCount: 5)
     }
     
     public func send() {
-        send(host: Host.ip, port: Host.port)
+        send(addr: .init(host: Host.ip, port: Host.port), body: requestBody())
     }
     
     public func listen() {
         listen(addr: .init(host: Host.ip, port: Host.port))
     }
     
-    public override func requestBody() -> MessageBody {
+    private func requestBody() -> MessageBody {
         let body = MessageBody.init()
         
         body.set(method: .mSearch)

@@ -10,18 +10,18 @@ public class AliveSender: Sender<AliveListener> {
     fileprivate var server: Value.Server!
         
     internal init() {
-        super.init(sendCount: 3)
+        super.init(sendCount: 5)
     }
     
     public func send() {
-        super.send()
+        super.send(addr: .init(host: Host.ip, port: Host.port), body: requestBody())
     }
     
     public override func listen(addr: Address) {
         super.listen(addr: addr)
     }
     
-    override open func requestBody() -> MessageBody {
+    private func requestBody() -> MessageBody {
         let body = MessageBody.init()
                 
         body.set(method: .notify)
