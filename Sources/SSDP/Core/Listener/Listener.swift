@@ -70,7 +70,7 @@ open class Listener: NSObject {
 }
 
 extension Listener: SocketListenerDelegate {
-    public func socket(_ aSocket: SocketListener!, didReceive aData: Data!, fromAddress anAddress: String!) {
+    public func socket(_ aSocket: SocketListener!, didReceive aData: Data!, fromAddress anAddress: String!, andPort port: UInt) {
         buffer.append(aData)
         read(data: buffer, from: .init(host: anAddress, port: 0))
     }
