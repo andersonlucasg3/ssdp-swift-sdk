@@ -71,8 +71,13 @@ open class Listener: NSObject {
                         
                         self.read(from: .from(addr: addr))
                     }
+                } catch let error as Socket.Error {
+                    if error.errorCode == Socket.SOCKET_ERR_BAD_DESCRIPTOR {
+                        self.stop()
+                        try? self.createSocket()
+                    }
                 } catch {
-                    print("error trying to read socket: \(error)")
+                    print("Unknown error trying to read socket: \(error)")
                 }
             } while self.socket != nil
         }
@@ -91,7 +96,7 @@ open class Listener: NSObject {
             } else {
                 break
             }
-        } while buffer.count > 0
+        } while buffer.count > 0 && socket != nil
     }
     
     fileprivate func createSocket() throws {

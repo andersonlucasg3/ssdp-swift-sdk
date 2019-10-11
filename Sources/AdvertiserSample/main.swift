@@ -10,7 +10,7 @@ let sender = AliveSender.RTU.alive(location: location,
                                 nt: urn,
                                 usn: .nt(uuid: uuid, nt: urn),
                                 uuid: uuid,
-                                duration: 120).build()
+                                duration: 20).build()
 
 class Del: ListenerDelegate {
     func didReceiveMessage(body: MessageBody, from addr: Address) {
@@ -19,7 +19,7 @@ class Del: ListenerDelegate {
             print("Received m search from host: \(addr.host), and port: \(addr.port)")
             let rtu = SearchResponseSender.RTU.self
             let respSender = rtu.response(sender: sender,
-                                      duration: 120,
+                                      duration: 20,
                                       location: location,
                                       st: .nt(nt: urn),
                                       usn: .nt(uuid: uuid, nt: urn)).build()

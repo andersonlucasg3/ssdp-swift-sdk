@@ -20,6 +20,7 @@ public class SearchResponseSender {
         let body = MessageBody.init()
         
         let fmtr = DateFormatter.init()
+        fmtr.dateFormat = "HH:mm:ss dd/MM/yyyy"
         
         let fmtDate = fmtr.string(from: .init())
         
