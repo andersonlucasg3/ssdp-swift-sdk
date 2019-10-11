@@ -64,7 +64,8 @@ open class Listener: NSObject {
             repeat {
                 do {
                     var data = Data.init()
-                    let (count, addr) = try self.socket!.readDatagram(into: &data)
+                    guard let (count, addr) = try self.socket?.readDatagram(into: &data)
+                        else { continue }
                     
                     if let addr = addr, count > 0 {
                         self.buffer.append(data)
@@ -79,6 +80,8 @@ open class Listener: NSObject {
                 } catch {
                     print("Unknown error trying to read socket: \(error)")
                 }
+                
+                sleep(100)
             } while self.socket != nil
         }
     }
