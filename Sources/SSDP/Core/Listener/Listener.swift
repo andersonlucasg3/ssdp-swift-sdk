@@ -3,6 +3,8 @@ import struct Foundation.Data
 import struct Foundation.Date
 import struct Foundation.TimeInterval
 import Socket
+import Darwin
+import Darwin.net
 
 public protocol ListenerDelegate: class {
     func didReceiveMessage(body: MessageBody, from addr: Address)
@@ -22,9 +24,23 @@ open class Listener: NSObject {
                 
         try createSocket()
         
+        guard let socket = socket else { return }
+        
         Log.debug(message: "\(#function) port: \(addr.port), and ip: \(addr.host)")
         
-        try socket?.listen(on: Int(addr.port))
+        var mreq: ip_mreq = .init()
+        mreq.imr_multiaddr.s_addr = inet_addr(addr.host)
+        mreq.imr_interface.s_addr = INADDR_ANY.byteSwapped
+        if setsockopt(
+            socket.socketfd,
+            IPPROTO_IP,
+            IP_ADD_MEMBERSHIP,
+            &mreq,
+            socklen_t.init(MemoryLayout<ip_mreq>.size)) < 0 {
+            throw Error.alreadyRequesting
+        }
+        
+        try socket.listen(on: Int(addr.port))
         
         startReading()
     }

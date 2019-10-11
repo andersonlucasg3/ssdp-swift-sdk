@@ -8,4 +8,5 @@ enum Error: Swift.Error {
     case invalidRepsonse(data: Data)
     case alreadyRequesting
     case noIpAvailable
+    case sockOptMulticastError
 }

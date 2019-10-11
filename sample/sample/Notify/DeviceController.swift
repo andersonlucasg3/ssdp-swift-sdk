@@ -26,10 +26,10 @@ class DeviceController: ListenerDelegate {
                                        server: .this).build()
             
             aliveSender?.listenerDelegate = self
-            try? aliveSender?.listen()
+            try! aliveSender?.listen()
         }
         
-        aliveSender?.send()
+        try! aliveSender?.send()
     }
     
     func search() {
@@ -44,7 +44,7 @@ class DeviceController: ListenerDelegate {
 //            try? searchListener?.listen(addr: .init(host: DeviceController.ip, port: Host.port))
         }
         
-        searchRequest?.send()
+        try! searchRequest?.send()
     }
     
     func stopSearch() {
@@ -78,7 +78,7 @@ class DeviceController: ListenerDelegate {
                                          location: location,
                                          st: .nt(nt: urn),
                                          usn: .nt(uuid: myUuid, nt: urn)).build()
-            responder.send(addr: addr)
+            try! responder.send(addr: addr)
         case .httpOk:
             print("Received http ok from: \(addr)")
             if let st = body.headers[.st] { print("Conetent: \(st)") }
