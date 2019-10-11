@@ -2,7 +2,7 @@ import SSDP
 import Foundation
 
 let address = getAddress(for: .wifi) ?? getAddress(for: .ethernet) ?? "0.0.0.0:0"
-let urn: Value.NT = .urn(domain: "receiver-tvos-globo-com", type: "appletv", version: 1)
+let urn: Value.NT = .urn(domain: "com-globo-play-receiver", type: "appletv", version: 1)
 let searcher = SearchSender.RTU.search(nt: urn, delay: 5).build()
 let listener = SearchListener.init()
 

@@ -5,7 +5,7 @@ class DeviceController: ListenerDelegate {
     fileprivate static let ip = getAddress(for: .wifi) ?? getAddress(for: .cellular) ?? "0.0.0.0:0"
     
     fileprivate let myUuid = UUID.init().uuidString
-    fileprivate let urn = Value.NT.urn(domain: "receiver-tvos-globo-com", type: "appletv", version: 1)
+    fileprivate let urn = Value.NT.urn(domain: "com-globo-play-receiver", type: "appletv", version: 1)
     fileprivate let location = "ws://\(ip)/receiver"
     
     fileprivate var aliveSender: AliveSender?
@@ -33,25 +33,27 @@ class DeviceController: ListenerDelegate {
     }
     
     func search() {
-        searchRequest?.stop()
-        searchListener?.stop()
-        
-        searchRequest = SearchSender.Builder.init()
-            .set(nt: .ssdp(ssdp: .all))
-            .build()
-        
-        searchRequest?.listenerDelegate = self
-        searchRequest?.listen()
-        
-        searchListener = .init()
-        searchListener?.delegate = self
-        searchListener?.listen(addr: .init(host: Host.ip, port: 0))
+        if searchRequest == nil {
+            searchRequest = SearchSender.Builder.init()
+                .set(nt: .ssdp(ssdp: .all))
+                .build()
+            
+            searchRequest?.listenerDelegate = self
+            searchRequest?.listen()
+            
+            searchListener = .init()
+            searchListener?.delegate = self
+            searchListener?.listen(addr: .init(host: Host.ip, port: 0))
+        }
         
         searchRequest?.send()
     }
     
     func stopSearch() {
+        searchRequest?.stop()
+        searchListener?.stop()
         
+        aliveSender?.stop()
     }
     
     // MARK: - ListenerDelegate
