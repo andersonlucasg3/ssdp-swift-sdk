@@ -24,6 +24,7 @@ open class Listener: NSObject {
         
         Log.debug(message: "\(#function) port: \(addr.port), and ip: \(addr.host)")
         
+        try socket?.bind(toAddress: GCDAsyncUdpSocket.convert(host: addr.host, port: addr.port))
         try socket?.beginReceiving()
     }
     

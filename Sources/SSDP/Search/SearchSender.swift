@@ -10,7 +10,7 @@ public class SearchSender: Sender<SearchListener> {
     }
     
     public func listen() throws {
-        try listen(addr: .init(host: Host.ip, port: Host.port))
+        try listen(addr: .init(host: try localIP(), port: Host.port))
     }
     
     private func requestBody() -> MessageBody {

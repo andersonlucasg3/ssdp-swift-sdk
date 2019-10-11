@@ -7,4 +7,5 @@ enum Error: Swift.Error {
     case invalidIP(value: String)
     case invalidRepsonse(data: Data)
     case alreadyRequesting
+    case noIpAvailable
 }

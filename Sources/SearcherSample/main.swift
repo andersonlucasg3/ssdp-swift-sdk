@@ -3,18 +3,16 @@ import Foundation
 
 let address = getAddress(for: .wifi) ?? getAddress(for: .ethernet) ?? "0.0.0.0:0"
 let urn: Value.NT = .urn(domain: "com-globo-play-receiver", type: "appletv", version: 1)
-let searcher = SearchSender.RTU.searchAll(delay: 5).build()//(nt: urn, delay: 5).build()
-let listener = SearchListener.init()
+let searcher = SearchSender.RTU.searchAll(delay: 5).build()
 
 class Del: ListenerDelegate {
     func didReceiveMessage(body: MessageBody, from addr: Address) {
-//        print("Did receive \n\(body.build())\nfrom \(addr)")
-        
         if body.method == .notify {
             guard let nt = body.headers[.nt] else { return }
             if nt == .nt(value: urn) {
                 print("Received filtered notify from \(addr)")
                 print("Content: \(nt)")
+                print()
             }
         }
         if body.method == .httpOk {
@@ -22,6 +20,7 @@ class Del: ListenerDelegate {
             if st == .st(value: .nt(nt: urn)) {
                 print("Received filtered httpok from \(addr)")
                 print("Content: \(st)")
+                print()
             }
         }
     }
@@ -30,9 +29,6 @@ class Del: ListenerDelegate {
 let del  = Del.init()
 searcher.listenerDelegate = del
 try searcher.listen()
-
-//listener.delegate = del
-//try listener.listen(addr: .init(host: Host.ip, port: 0))
 
 func request() {
     searcher.send()

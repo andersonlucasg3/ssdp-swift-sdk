@@ -41,9 +41,9 @@ class DeviceController: ListenerDelegate {
             searchRequest?.listenerDelegate = self
             try? searchRequest?.listen()
             
-            searchListener = .init()
-            searchListener?.delegate = self
-            try? searchListener?.listen(addr: .init(host: DeviceController.ip, port: Host.port))
+//            searchListener = .init()
+//            searchListener?.delegate = self
+//            try? searchListener?.listen(addr: .init(host: DeviceController.ip, port: Host.port))
         }
         
         searchRequest?.send()

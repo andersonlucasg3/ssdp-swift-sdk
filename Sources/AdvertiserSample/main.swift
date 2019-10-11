@@ -30,7 +30,7 @@ class Del: ListenerDelegate {
 
 let del = Del.init()
 sender.listenerDelegate = del
-try sender.listen(addr: .init(host: Host.ip, port: Host.port))
+try sender.listen()
 
 func request() {
     sender.send()

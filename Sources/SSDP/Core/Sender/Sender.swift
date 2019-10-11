@@ -30,6 +30,12 @@ open class Sender<ListenerType> where ListenerType: Listener {
         try listener.listen(addr: addr)
     }
     
+    func localIP() throws -> String {
+        guard let address = getAddress(for: .wifi) ?? getAddress(for: .ethernet) ?? getAddress(for: .cellular)
+        else { throw Error.noIpAvailable }
+        return address
+    }
+    
     public func stop() {
         listener.stop()
     }
