@@ -81,7 +81,7 @@ open class Listener: NSObject {
                     print("Unknown error trying to read socket: \(error)")
                 }
                 
-                usleep(100000)
+                usleep(100000) // sleeps for 100 ms
             } while self.socket != nil
         }
     }
