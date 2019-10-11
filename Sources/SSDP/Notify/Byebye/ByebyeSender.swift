@@ -4,8 +4,8 @@ public class ByebyeSender: Sender<Listener> {
     fileprivate var nt: Value.NT!
     fileprivate var uuid: String!
         
-    public func send() {
-        super.send(addr: .init(host: Host.ip, port: Host.port), body: requestBody())
+    public func send() throws {
+        try send(addr: .init(host: Host.ip, port: Host.port), body: requestBody())
     }
     
     private func requestBody() -> MessageBody {

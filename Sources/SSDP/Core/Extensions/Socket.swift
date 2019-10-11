@@ -1,5 +1,4 @@
 import Foundation
-import CocoaAsyncSocket
 
 public enum Network: String {
     case wifi = "en"
@@ -46,14 +45,4 @@ public func getAddress(for network: Network, and inet: Network.Inet = .ipv4) -> 
     freeifaddrs(ifaddr)
 
     return address
-}
-
-extension GCDAsyncUdpSocket {
-    static func convert(host: String, port: UInt16) -> Data {
-        var v4Addr: NSData? = .init()
-        GCDAsyncUdpSocket.convertNumericHost(host, port: port,
-                                             intoAddress4: &v4Addr,
-                                             address6: nil)
-        return v4Addr! as Data
-    }
 }

@@ -9,12 +9,12 @@ public class AliveSender: Sender<AliveListener> {
     fileprivate var duration: Int = 120
     fileprivate var server: Value.Server!
     
-    public func send() {
-        super.send(addr: .init(host: Host.ip, port: Host.port), body: requestBody())
+    public func send() throws {
+        try send(addr: .init(host: Host.ip, port: Host.port), body: requestBody())
     }
     
     public func listen() throws {
-        try super.listen(addr: .init(host: try localIP(), port: Host.port))
+        try listen(addr: .init(host: Host.ip, port: Host.port))
     }
     
     private func requestBody() -> MessageBody {

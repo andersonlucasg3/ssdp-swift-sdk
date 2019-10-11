@@ -26,7 +26,7 @@ class DeviceController: ListenerDelegate {
                                        server: .this).build()
             
             aliveSender?.listenerDelegate = self
-            try? aliveSender?.listen(addr: .init(host: Host.ip, port: Host.port))
+            try? aliveSender?.listen()
         }
         
         aliveSender?.send()
@@ -34,9 +34,7 @@ class DeviceController: ListenerDelegate {
     
     func search() {
         if searchRequest == nil {
-            searchRequest = SearchSender.Builder.init()
-                .set(nt: .ssdp(ssdp: .all))
-                .build()
+            searchRequest = SearchSender.RTU.searchAll(delay: 0).build()
             
             searchRequest?.listenerDelegate = self
             try? searchRequest?.listen()
@@ -66,12 +64,14 @@ class DeviceController: ListenerDelegate {
         switch body.method! {
         case .notify:
             print("Received notify from: \(addr)")
-            print("Conetent: \n\(body.headers[.nt])")
+            if let nt = body.headers[.nt] { print("Conetent: \(nt)") }
+            print()
         case .mSearch:
             guard let aliveSender = aliveSender else { return }
             
             print("Received msearch from: \(addr)")
-            print("Conetent: \n\(body.headers)")
+            print("Conetent: \(body.headers)")
+            print()
             let rtu = SearchResponseSender.RTU.self
             let responder = rtu.response(sender: aliveSender,
                                          duration: 120,
@@ -81,7 +81,8 @@ class DeviceController: ListenerDelegate {
             responder.send(addr: addr)
         case .httpOk:
             print("Received http ok from: \(addr)")
-            print("Conetent: \n\(body.headers[.st])")
+            if let st = body.headers[.st] { print("Conetent: \(st)") }
+            print()
         }
     }
 }

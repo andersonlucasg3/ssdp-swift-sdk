@@ -23,7 +23,7 @@ class Del: ListenerDelegate {
                                       location: location,
                                       st: .nt(nt: urn),
                                       usn: .nt(uuid: uuid, nt: urn)).build()
-            respSender.send(addr: .init(host: addr.host, port: Host.port))
+            try? respSender.send(addr: .init(host: addr.host, port: Host.port))
         }
     }
 }
@@ -33,8 +33,8 @@ sender.listenerDelegate = del
 try sender.listen()
 
 func request() {
-    sender.send()
-    
+    try? sender.send()
+
     DispatchQueue.main.asyncAfter(deadline: .now() + 20) {
         request()
     }

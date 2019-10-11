@@ -24,15 +24,12 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/andersonlucasg3/CocoaAsyncSocket", .branch("master"))
+        .package(url: "https://github.com/IBM-Swift/BlueSocket", from: "1.0.0")
     ],
     targets: [
         .target(
-            name: "Socket"
-        ),
-        .target(
             name: "SSDP",
-            dependencies: [ "CocoaAsyncSocket" ]
+            dependencies: [ "Socket" ]
         ),
         .target(
             name: "AdvertiserSample",

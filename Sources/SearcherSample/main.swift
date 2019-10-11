@@ -31,7 +31,7 @@ searcher.listenerDelegate = del
 try searcher.listen()
 
 func request() {
-    searcher.send()
+    try? searcher.send()
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
         request()

@@ -2,21 +2,12 @@
   "object": {
     "pins": [
       {
-        "package": "CocoaAsyncSocket",
-        "repositoryURL": "https://github.com/andersonlucasg3/CocoaAsyncSocket",
-        "state": {
-          "branch": "master",
-          "revision": "b4c61ec1c716ec8b7a96063c4c0400fa76d719dc",
-          "version": null
-        }
-      },
-      {
-        "package": "CocoaLumberjack",
-        "repositoryURL": "https://github.com/CocoaLumberjack/CocoaLumberjack.git",
+        "package": "Socket",
+        "repositoryURL": "https://github.com/IBM-Swift/BlueSocket",
         "state": {
           "branch": null,
-          "revision": "ded5f5999c853e7fef61fc27db100b169db0e21f",
-          "version": "3.6.0"
+          "revision": "f82e1401f04f62b2e8ce4670456d104466957810",
+          "version": "1.0.50"
         }
       }
     ]

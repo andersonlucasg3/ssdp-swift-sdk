@@ -2,7 +2,6 @@ import Dispatch
 import struct Foundation.TimeInterval
 import struct Foundation.Date
 import struct Foundation.Data
-import CocoaAsyncSocket
 
 open class Sender<ListenerType> where ListenerType: Listener {
     fileprivate var listener: ListenerType
@@ -16,14 +15,14 @@ open class Sender<ListenerType> where ListenerType: Listener {
         listener = .init()
     }
     
-    func send(addr: Address, body: MessageBody) {
+    func send(addr: Address, body: MessageBody) throws {
         Log.debug(message: "Sender on address: \(addr.host):\(addr.port)")
         
         let body = body.build()
         
         Log.debug(message: "Sending request \n\(String.init(data: body, encoding: .ascii) ?? "")")
         
-        send(data: body, to: addr)
+        try send(data: body, to: addr)
     }
     
     func listen(addr: Address) throws {
@@ -31,7 +30,9 @@ open class Sender<ListenerType> where ListenerType: Listener {
     }
     
     func localIP() throws -> String {
-        guard let address = getAddress(for: .wifi) ?? getAddress(for: .ethernet) ?? getAddress(for: .cellular)
+        guard let address = getAddress(for: .wifi) ??
+                            getAddress(for: .ethernet) ??
+                            getAddress(for: .cellular)
         else { throw Error.noIpAvailable }
         return address
     }
@@ -40,7 +41,7 @@ open class Sender<ListenerType> where ListenerType: Listener {
         listener.stop()
     }
     
-    fileprivate func send(data: Data, to addr: Address) {
-        listener.socket?.send(data, toHost: addr.host, port: addr.port, withTimeout: -1, tag: 1)
+    fileprivate func send(data: Data, to addr: Address) throws {
+        try listener.send(data: data, to: addr)
     }
 }

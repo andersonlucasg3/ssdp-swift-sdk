@@ -12,8 +12,8 @@ public class SearchResponseSender {
         self.sender = sender
     }
     
-    public func send(addr: Address) {
-        sender.send(addr: addr, body: requestBody())
+    public func send(addr: Address) throws {
+        try sender.send(addr: addr, body: requestBody())
     }
     
     private func requestBody() -> MessageBody {

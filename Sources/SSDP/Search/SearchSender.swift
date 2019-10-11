@@ -5,12 +5,12 @@ public class SearchSender: Sender<SearchListener> {
     fileprivate var ssdp: Value.SSDP!
     fileprivate var delay: Int = 120
     
-    public func send() {
-        send(addr: .init(host: Host.ip, port: Host.port), body: requestBody())
+    public func send() throws {
+        try send(addr: .init(host: Host.ip, port: Host.port), body: requestBody())
     }
     
     public func listen() throws {
-        try listen(addr: .init(host: try localIP(), port: Host.port))
+        try listen(addr: .init(host: Host.ip, port: Host.port))
     }
     
     private func requestBody() -> MessageBody {
