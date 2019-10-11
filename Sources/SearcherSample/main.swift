@@ -7,15 +7,15 @@ let searcher = SearchSender.RTU.search(nt: urn, delay: 5).build()
 let listener = SearchListener.init()
 
 class Del: ListenerDelegate {
-    func didReceiveMessage(body: MessageBody, from host: String) {
+    func didReceiveMessage(body: MessageBody, from addr: Address) {
         if body.method == .notify {
             guard let nt = body.headers[.nt] else { return }
             if nt == .nt(value: urn) {
-                print("Received filtered notify from \(host)")
+                print("Received filtered notify from \(addr)")
             }
         }
         if body.method == .httpOk {
-            print("Received filtered httpok from \(host)")
+            print("Received filtered httpok from \(addr)")
             guard let st = body.headers[.st] else { return }
             if st == .st(value: .nt(nt: urn)) {
                 
@@ -26,10 +26,10 @@ class Del: ListenerDelegate {
 
 let del  = Del.init()
 searcher.listenerDelegate = del
-searcher.listen(addr: Address.init(host: Host.ip, port: 0))
+searcher.listen()
 
 listener.delegate = del
-listener.listen(on: Host.port, and: Host.ip)
+listener.listen(addr: .init(host: Host.ip, port: 0))
 
 func request() {
     searcher.send()

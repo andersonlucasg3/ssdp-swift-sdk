@@ -38,6 +38,7 @@ public func getAddress(for network: Network, and inet: Network.Inet = .ipv4) -> 
                             &hostname, socklen_t(hostname.count),
                             nil, socklen_t(0), NI_NUMERICHOST)
                 address = String(cString: hostname)
+                break
             }
         }
     }
