@@ -6,7 +6,7 @@ import class Foundation.Bundle
 
 public enum Value: Equatable {
     case host(value: Host)
-    case date(value: TimeInterval)
+    case date(value: String)
     case ext
     case nt(value: NT)
     case nts(value: NTS)

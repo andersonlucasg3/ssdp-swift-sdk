@@ -13,8 +13,8 @@ public class SearchSender: Sender<SearchListener> {
         send(addr: .init(host: Host.ip, port: Host.port), body: requestBody())
     }
     
-    public func listen() {
-        listen(addr: .init(host: Host.ip, port: Host.port))
+    public func listen() throws {
+        try listen(addr: .init(host: Host.ip, port: Host.port))
     }
     
     private func requestBody() -> MessageBody {

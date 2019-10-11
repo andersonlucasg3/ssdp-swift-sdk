@@ -29,10 +29,10 @@ class Del: ListenerDelegate {
 
 let del  = Del.init()
 searcher.listenerDelegate = del
-searcher.listen()
+try searcher.listen()
 
-listener.delegate = del
-listener.listen(addr: .init(host: Host.ip, port: 0))
+//listener.delegate = del
+//try listener.listen(addr: .init(host: Host.ip, port: 0))
 
 func request() {
     searcher.send()

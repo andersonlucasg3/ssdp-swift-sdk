@@ -2,14 +2,14 @@ import Dispatch
 import struct Foundation.Data
 import struct Foundation.Date
 import struct Foundation.TimeInterval
-import Socket
+import CocoaAsyncSocket
 
 public protocol ListenerDelegate: class {
     func didReceiveMessage(body: MessageBody, from addr: Address)
 }
 
 open class Listener: NSObject {
-    fileprivate(set) internal var socket: SocketListener?
+    fileprivate(set) internal var socket: GCDAsyncUdpSocket?
     fileprivate var buffer = Data.init()
     fileprivate let delimiterData = "\r\n\r\n".data(using: .ascii)!
         
@@ -17,14 +17,14 @@ open class Listener: NSObject {
     
     public required override init() { super.init() }
     
-    func listen(addr: Address) {
+    func listen(addr: Address) throws {
         guard socket == nil else { return }
                 
-        createSocket(addr.port, addr.host)
+        try createSocket()
         
         Log.debug(message: "\(#function) port: \(addr.port), and ip: \(addr.host)")
         
-        socket?.open()
+        try socket?.beginReceiving()
     }
     
     func received(response: Data, from addr: Address) throws -> Bool {
@@ -52,9 +52,9 @@ open class Listener: NSObject {
         } while buffer.count > 0
     }
     
-    fileprivate func createSocket(_ port: UInt16, _ host: String) {
-        socket = SocketListener.init(address: host, andPort: Int(port))
-        socket?.delegate = self
+    fileprivate func createSocket() throws {
+        socket = GCDAsyncUdpSocket.init(delegate: self, delegateQueue: .main)
+        try socket?.enableBroadcast(true)
     }
     
     fileprivate func checkForDelimiter() -> Range<Int>? {
@@ -74,17 +74,31 @@ open class Listener: NSObject {
         let range = delimiter.endIndex..<buffer.count
         buffer = buffer.subdata(in: range)
     }
-
 }
 
-extension Listener: SocketListenerDelegate {
-    public func socket(_ aSocket: SocketListener!, didReceive aData: Data!, fromAddress anAddress: String!, andPort port: UInt) {
-        buffer.append(aData)
-        read(from: .init(host: anAddress, port: UInt16(port)))
+extension Listener: GCDAsyncUdpSocketDelegate {
+    public func udpSocket(_ sock: GCDAsyncUdpSocket, didReceive data: Data,
+                          fromAddress address: Data, withFilterContext filterContext: Any?) {
+        buffer.append(data)
+        
+        let host = GCDAsyncUdpSocket.host(fromAddress: address)
+        let port = GCDAsyncUdpSocket.port(fromAddress: address)
+        read(from: .init(host: host!, port: port))
     }
     
-    public func socket(_ aSocket: SocketListener!, didEncounterError anError: Swift.Error!) {
-        guard let error = anError else { return }
-        Log.debug(message: "Socket error: \(error)")
+    public func udpSocket(_ sock: GCDAsyncUdpSocket, didNotConnect error: Swift.Error?) {
+        print(error)
+    }
+    
+    public func udpSocket(_ sock: GCDAsyncUdpSocket, didSendDataWithTag tag: Int) {
+        
+    }
+    
+    public func udpSocketDidClose(_ sock: GCDAsyncUdpSocket, withError error: Swift.Error?) {
+        print(error)
+    }
+    
+    public func udpSocket(_ sock: GCDAsyncUdpSocket, didNotSendDataWithTag tag: Int, dueToError error: Swift.Error?) {
+        print(error)
     }
 }

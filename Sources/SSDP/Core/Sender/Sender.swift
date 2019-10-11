@@ -2,7 +2,7 @@ import Dispatch
 import struct Foundation.TimeInterval
 import struct Foundation.Date
 import struct Foundation.Data
-import Socket
+import CocoaAsyncSocket
 
 open class Sender<ListenerType> where ListenerType: Listener {
     fileprivate var listener: ListenerType
@@ -31,8 +31,8 @@ open class Sender<ListenerType> where ListenerType: Listener {
         multipleShots(body: data, to: addr)
     }
     
-    func listen(addr: Address) {
-        listener.listen(addr: addr)
+    func listen(addr: Address) throws {
+        try listener.listen(addr: addr)
     }
     
     public func stop() {
@@ -48,6 +48,7 @@ open class Sender<ListenerType> where ListenerType: Listener {
     }
     
     fileprivate func send(data: Data, to addr: Address) {
-        listener.socket?.send(data, toAddress: addr.host, andPort: UInt(addr.port))
+        let addrData = GCDAsyncUdpSocket.convert(host: addr.host, port: addr.port)
+        listener.socket?.send(data, toAddress: addrData, withTimeout: 10, tag: 1)
     }
 }

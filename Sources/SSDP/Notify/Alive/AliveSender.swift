@@ -17,8 +17,8 @@ public class AliveSender: Sender<AliveListener> {
         super.send(addr: .init(host: Host.ip, port: Host.port), body: requestBody())
     }
     
-    public override func listen(addr: Address) {
-        super.listen(addr: addr)
+    public override func listen(addr: Address) throws {
+        try super.listen(addr: addr)
     }
     
     private func requestBody() -> MessageBody {

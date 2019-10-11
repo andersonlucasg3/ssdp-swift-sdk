@@ -165,7 +165,7 @@ public class MessageBody {
         case .st: return .st(value: st(value: value))
         case .userAgent: if let server = server(value: value) { return .userAgent(value: server) }
         case .usn: return .usn(value: usn(value: value))
-        case .date: return .date(value: TimeInterval(value.replacingOccurrences(of: "\"", with: ""))!)
+        case .date: return .date(value: value)
         case .ext: return .ext
         }
         return nil

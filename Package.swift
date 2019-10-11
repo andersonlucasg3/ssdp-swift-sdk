@@ -24,7 +24,7 @@ let package = Package(
         )
     ],
     dependencies: [
-         
+        .package(url: "https://github.com/andersonlucasg3/CocoaAsyncSocket", .branch("master"))
     ],
     targets: [
         .target(
@@ -32,7 +32,7 @@ let package = Package(
         ),
         .target(
             name: "SSDP",
-            dependencies: [ "Socket" ]
+            dependencies: [ "CocoaAsyncSocket" ]
         ),
         .target(
             name: "AdvertiserSample",

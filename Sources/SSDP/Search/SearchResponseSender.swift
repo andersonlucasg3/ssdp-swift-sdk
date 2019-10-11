@@ -19,9 +19,13 @@ public class SearchResponseSender {
     private func requestBody() -> MessageBody {
         let body = MessageBody.init()
         
+        let fmtr = DateFormatter.init()
+        
+        let fmtDate = fmtr.string(from: .init())
+        
         body.set(method: .httpOk)
         body.add(header: .cacheControl, with: .cacheControl(value: .maxAge(seconds: duration)))
-        body.add(header: .date, with: .date(value: Date().timeIntervalSince1970))
+        body.add(header: .date, with: .date(value: fmtDate))
         body.add(header: .ext, with: .ext)
         body.add(header: .location, with: .location(value: location))
         body.add(header: .server, with: .server(value: .this))
