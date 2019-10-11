@@ -143,7 +143,7 @@
         ^{
             struct sockaddr_in theIncomingAddr;
             memset(&theIncomingAddr, 0, sizeof(theIncomingAddr));
-                size_t theDataSize = dispatch_source_get_data(_dispatchSource);
+            size_t theDataSize = dispatch_source_get_data(_dispatchSource);
             char theBuffer[theDataSize + 1];
             int theReceiveBytesCount = 0;
             socklen_t theAddressSize = sizeof(theIncomingAddr);

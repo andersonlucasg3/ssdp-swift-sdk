@@ -11,7 +11,7 @@ public protocol ListenerDelegate: class {
 open class Listener: NSObject {
     fileprivate(set) internal var socket: SocketListener?
     fileprivate var buffer = Data.init()
-    fileprivate let delimiterData = "\r\n\r\n".data(using: .utf8)!
+    fileprivate let delimiterData = "\r\n\r\n".data(using: .ascii)!
         
     public weak var delegate: ListenerDelegate?
     
@@ -27,7 +27,7 @@ open class Listener: NSObject {
         socket?.open()
     }
     
-    func received(response: Data, from addr: Address) throws {
+    func received(response: Data, from addr: Address) throws -> Bool {
         throw Error.notImplemented(name: #function)
     }
     
@@ -36,14 +36,20 @@ open class Listener: NSObject {
         socket = nil
     }
         
-    fileprivate func read(data: Data, from addr: Address) {
-        if let bufferDelimiterRange = self.checkForDelimiter(in: buffer) {
-            let packageData = self.packageData(from: bufferDelimiterRange)
-            
-            self.sliceBuffer(for: bufferDelimiterRange)
-            
-            try! received(response: packageData, from: addr)
-        }
+    fileprivate func read(from addr: Address) {
+        repeat {
+            if let bufferDelimiterRange = self.checkForDelimiter() {
+                let packageData = self.packageData(from: bufferDelimiterRange)
+                
+                self.sliceBuffer(for: bufferDelimiterRange)
+                
+                if try! !received(response: packageData, from: addr) {
+                    break
+                }
+            } else {
+                break
+            }
+        } while buffer.count > 0
     }
     
     fileprivate func createSocket(_ port: UInt16, _ host: String) {
@@ -51,8 +57,8 @@ open class Listener: NSObject {
         socket?.delegate = self
     }
     
-    fileprivate func checkForDelimiter(in data: Data) -> Range<Int>? {
-        return data.range(of: delimiterData)
+    fileprivate func checkForDelimiter() -> Range<Int>? {
+        return buffer.range(of: delimiterData)
     }
     
     fileprivate func packageRange(from delimiter: Range<Int>) -> Range<Int> {
@@ -60,11 +66,13 @@ open class Listener: NSObject {
     }
     
     fileprivate func packageData(from delimiter: Range<Int>) -> Data {
-        return buffer.subdata(in: packageRange(from: delimiter))
+        let range = packageRange(from: delimiter)
+        return buffer.subdata(in: range)
     }
 
     fileprivate func sliceBuffer(for delimiter: Range<Int>) {
-        buffer = buffer.subdata(in: delimiter.endIndex..<buffer.count)
+        let range = delimiter.endIndex..<buffer.count
+        buffer = buffer.subdata(in: range)
     }
 
 }
@@ -72,7 +80,7 @@ open class Listener: NSObject {
 extension Listener: SocketListenerDelegate {
     public func socket(_ aSocket: SocketListener!, didReceive aData: Data!, fromAddress anAddress: String!, andPort port: UInt) {
         buffer.append(aData)
-        read(data: buffer, from: .init(host: anAddress, port: UInt16(port)))
+        read(from: .init(host: anAddress, port: UInt16(port)))
     }
     
     public func socket(_ aSocket: SocketListener!, didEncounterError anError: Swift.Error!) {

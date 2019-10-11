@@ -25,7 +25,7 @@ open class Sender<ListenerType> where ListenerType: Listener {
         
         let body = body.build()
         
-        Log.debug(message: "Sending request \n\(String.init(data: body, encoding: .utf8) ?? "")")
+        Log.debug(message: "Sending request \n\(String.init(data: body, encoding: .ascii) ?? "")")
         
         let data = body
         multipleShots(body: data, to: addr)
