@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'SsdpSdk'
-  s.version          = '0.1.0'
+  s.version          = '0.2.0'
   s.summary          = 'SSDP for iOS & tvOS.'
 
 
@@ -19,8 +19,7 @@ Simple implementation of advertising and device discovery over SSDP.
   s.ios.deployment_target = '10.0'
   s.tvos.deployment_target = '11.0'
 
-  s.source_files     = 'Sources/SSDP/**/*.{swift,h}',
-                       'Sources/Socket/**/*.{m,h}'
+  s.source_files     = 'Sources/SsdpSdk/**/*.{swift,h}'
 
   s.dependency       'BlueSocket'
 end
