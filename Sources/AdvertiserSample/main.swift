@@ -1,4 +1,4 @@
-import SSDP
+import SsdpSdk
 import Foundation
 
 let address = getAddress(for: .wifi) ?? getAddress(for: .ethernet) ?? "0.0.0.0:0"

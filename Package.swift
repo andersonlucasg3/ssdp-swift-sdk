@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "SSDP",
+    name: "SsdpSdk",
     platforms: [
         .iOS(.v10),
         .tvOS(.v11),
@@ -11,8 +11,8 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "SSDP",
-            targets: [ "SSDP" ]
+            name: "SsdpSdk",
+            targets: [ "SsdpSdk" ]
         ),
         .executable(
             name: "AdvertiserSample",
@@ -28,16 +28,16 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "SSDP",
+            name: "SsdpSdk",
             dependencies: [ "Socket" ]
         ),
         .target(
             name: "AdvertiserSample",
-            dependencies: [ "SSDP" ]
+            dependencies: [ "SsdpSdk" ]
         ),
         .target(
             name: "SearcherSample",
-            dependencies: [ "SSDP" ]
+            dependencies: [ "SsdpSdk" ]
         )
     ]
 )
