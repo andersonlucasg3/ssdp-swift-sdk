@@ -1,6 +1,6 @@
 import class Foundation.NSString
 
-enum Log {
+public enum Log {
     static func debug(message: String, file: String = #file, line: Int = #line, function: String = #function) {
         #if DEBUG
         let fileName = NSString.init(string: file).lastPathComponent
