@@ -40,7 +40,7 @@ open class Listener: NSObject {
             throw Error.alreadyRequesting
         }
         
-        try socket.listen(on: Int(addr.port))
+        try socket.listen(on: Int(addr.port), allowPortReuse: true)
         
         startReading()
     }
