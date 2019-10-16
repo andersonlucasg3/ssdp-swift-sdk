@@ -154,47 +154,50 @@ public class MessageBody {
     
     private func value(from value: String, for key: Header) -> Value? {
         switch key {
-        case .cacheControl: return .cacheControl(value: cacheControl(value: value))
+        case .cacheControl: if let value = cacheControl(value: value) { return .cacheControl(value: value) }
         case .host: return .host(value: .custom(address: value))
         case .location: return .location(value: value)
-        case .man: return .man(value: man(value: value))
-        case .mx: return .mx(value: .delay(seconds: Int(value)!))
+        case .man: if let man = man(value: value) { return .man(value: man) }
+        case .mx: if let seconds = Int(value) { return .mx(value: .delay(seconds: seconds)) }
         case .nt: if let nt = nt(value: value) { return .nt(value: nt) }
-        case .nts: return .nts(value: .sspd(value: ssdp(value: value)))
+        case .nts: if let ssdp = ssdp(value: value) { return .nts(value: .sspd(value: ssdp)) }
         case .server: if let server = server(value: value) { return .server(value: server) }
-        case .st: return .st(value: st(value: value))
+        case .st: if let st = st(value: value) { return .st(value: st) }
         case .userAgent: if let server = server(value: value) { return .userAgent(value: server) }
-        case .usn: return .usn(value: usn(value: value))
+        case .usn: if let usn = usn(value: value) { return .usn(value: usn) }
         case .date: return .date(value: value)
         case .ext: return .ext
         }
         return nil
     }
     
-    fileprivate func usn(value: String) -> Value.USN {
+    fileprivate func usn(value: String) -> Value.USN? {
         if value.contains("::") {
             let comps = value.components(separatedBy: "::")
-            let uuid = comps.first!
-            let urn = comps.last!
-            return .nt(uuid: uuid.components(separatedBy: ":").last!,
-                       nt: nt(value: urn)!)
+            guard let uuidFirst = comps.first else { return nil }
+            guard let urn = comps.last else { return nil }
+            guard let uuid = uuidFirst.components(separatedBy: ":").last else { return nil }
+            guard let nt = nt(value: urn) else { return nil }
+            return .nt(uuid: uuid, nt: nt)
         }
         let comps = value.components(separatedBy: ":")
-        return .uuid(uuid: comps.last!)
+        guard let uuid = comps.last else { return nil }
+        return .uuid(uuid: uuid)
     }
     
-    fileprivate func st(value: String) -> Value.ST {
+    fileprivate func st(value: String) -> Value.ST? {
         if let nt = nt(value: value) {
             return .nt(nt: nt)
         }
-        return .ssdp(ssdp: ssdp(value: value))
+        guard let ssdp = ssdp(value: value) else { return nil }
+        return .ssdp(ssdp: ssdp)
     }
     
     fileprivate func server(value: String) -> Value.Server? {
         let comps = value.replacingOccurrences(of: ",", with: "")
             .components(separatedBy: " ")
-        let osComps = comps.first!.components(separatedBy: "/")
-        let prodComps = comps.last!.components(separatedBy: "/")
+        guard let osComps = comps.first?.components(separatedBy: "/") else { return nil }
+        guard let prodComps = comps.last?.components(separatedBy: "/") else { return nil }
         
         guard osComps.count > 1 && prodComps.count > 1 else { return nil }
         
@@ -206,30 +209,37 @@ public class MessageBody {
             return .upnp
         } else if value.hasPrefix("urn:") {
             let comps = value.components(separatedBy: ":")
+            guard comps.count >= 5 else { return nil }
             let domain = comps[1]
             let type = comps[3]
             let version = comps[4]
-            return .urn(domain: domain, type: type, version: UInt16(version)!)
+            guard let versionInt = UInt16(version) else { return nil }
+            return .urn(domain: domain, type: type, version: versionInt)
         } else if value.hasPrefix("ssdp:") {
-            return .ssdp(ssdp: ssdp(value: value))
+            guard let ssdp = ssdp(value: value) else { return nil }
+            return .ssdp(ssdp: ssdp)
         } else if value.hasPrefix("uuid:") {
-            let uuid = value.components(separatedBy: ":").last!
+            guard let uuid = value.components(separatedBy: ":").last else { return nil }
             return .uuid(uuid: uuid)
         }
         return nil
     }
     
-    fileprivate func ssdp(value: String) -> Value.SSDP {
-        let value = value.replacingOccurrences(of: "\"", with: "")
-            .components(separatedBy: ":").last!
-        return Value.SSDP.init(rawValue: value)!
+    fileprivate func ssdp(value: String) -> Value.SSDP? {
+        guard let value = value.replacingOccurrences(of: "\"", with: "").components(separatedBy: ":").last else {
+            return nil
+        }
+        return Value.SSDP.init(rawValue: value)
     }
     
-    fileprivate func man(value: String) -> Value.MAN {
-        return .ssdp(ssdp: ssdp(value: value))
+    fileprivate func man(value: String) -> Value.MAN? {
+        guard let ssdp = ssdp(value: value) else { return nil }
+        return .ssdp(ssdp: ssdp)
     }
     
-    fileprivate func cacheControl(value: String) -> Value.CacheControl {
-        return .maxAge(seconds: Int(value.split(separator: "=").last!)!)
+    fileprivate func cacheControl(value: String) -> Value.CacheControl? {
+        guard let cacheValue = value.split(separator: "=").last else { return nil }
+        guard let cacheValueInt = Int(cacheValue) else { return nil }
+        return .maxAge(seconds: cacheValueInt)
     }
 }
