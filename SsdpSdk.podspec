@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'SsdpSdk'
-  s.version          = '0.4.0'
+  s.version          = '0.5.0'
   s.summary          = 'SSDP for iOS & tvOS.'
 
 
